@@ -1,0 +1,154 @@
+﻿<Window x:Class="CarSpending.AuthWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:CarSpending"
+        mc:Ignorable="d"
+        Title="AuthWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid Background="#303f5f">
+        <Border 
+            Visibility="Hidden"
+            x:Name="AuthBlock"
+            Padding="20" Background="White" Width="600" VerticalAlignment="Center"  CornerRadius="25"  >
+            <StackPanel>
+                <Grid Margin="20,20">
+                    <TextBlock Text="Войдите в приложение" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F"></TextBlock>
+
+                    <Button
+                        Click="ButtonReg_click"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        ToolTip="Нету акаунта? Пройдите регистрацию!)"
+                        Content="Регистрация" HorizontalAlignment="Right" />
+                    <Button
+                        Style="{StaticResource MaterialDesignPaperDarkButton}"
+                        ToolTip="Авторизоваться в приложении"
+                        Content="Авторизация" HorizontalAlignment="Left" IsEnabled="False" />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Account"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <TextBox
+                        x:Name="UserLogin_auth"
+                        materialDesign:HintAssist.Hint="Введите логин"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     VerticalAlignment="Center" Margin="21,0,0,-0.2" />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Lock"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <PasswordBox
+                        Margin="21,20,0,-0.2"
+                        x:Name="UserPassword_auth"
+                        materialDesign:HintAssist.Hint="Введите пароль"
+                        materialDesign:HintAssist.Foreground="#FF303F9F"
+                        materialDesign:TextFieldAssist.UnderlineBrush="#FF303F9F"
+                        Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" />
+
+                </Grid>
+                <Grid Margin="0,20,0,0">
+                    <Button 
+                        x:Name="ButtonGoAuth"
+                            Click="ButtonGoAuth_click"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        ToolTip="Войти в приложение"
+                        Content="Войти"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Width="250" 
+                            
+                            />
+                    
+                </Grid>
+            </StackPanel>
+
+        </Border>
+
+        <Border 
+            x:Name="RegBlock"
+            Padding="20" Background="White" Width="600" VerticalAlignment="Center" CornerRadius="25" >
+            <StackPanel>
+                <Grid Margin="20,20">
+                    <TextBlock Text="Зарегистрируйтесь" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F"></TextBlock>
+                    <Button 
+                            Style="{StaticResource MaterialDesignPaperDarkButton}"
+                            ToolTip="Зарегистрироваться в приложении"
+                            Content="Регистрация" HorizontalAlignment="Left" IsEnabled="False" />
+                    <Button
+                        Click="ButtonAuth_click"
+
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        ToolTip="Войдите в акаунт"
+                        Content="Авторизация"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" HorizontalAlignment="Right" />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Account"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    
+                    <TextBox
+                        x:Name ="UserName_reg"
+                        materialDesign:HintAssist.Hint="Введите ваше имя"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                        ToolTip="Не используйте специальные символы )(?:%№ " HorizontalAlignment="Right" Width="539"
+                        
+                    />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Account"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <TextBox
+                        x:Name="UserLogin_reg"
+                     materialDesign:HintAssist.Hint="Введите логин"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     VerticalAlignment="Center" 
+                     ToolTip="Не используйте специальные символы )(?:%№ " Margin="21,0,0,-0.2"/>
+                </Grid>
+
+                <Grid  VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="At"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <TextBox
+                        x:Name="UserEmail_reg"
+                    materialDesign:HintAssist.Hint="Введите емейл"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    VerticalAlignment="Center" Margin="21,0,0,-0.2" />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Lock"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <PasswordBox
+                        x:Name="UserPass_reg"
+
+                    materialDesign:HintAssist.Hint="Введите пароль"
+                        materialDesign:HintAssist.Foreground="#FF303F9F"
+                        materialDesign:TextFieldAssist.UnderlineBrush="#FF303F9F"
+                    ToolTip="Придумайте пароль"
+
+                        Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="21,0,0,-0.2" />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center">
+                    <materialDesign:PackIcon Kind="Lock"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <PasswordBox
+                        x:Name="UserPassAgain_reg"
+                        
+                    ToolTip="Повторите пароль"
+                    materialDesign:HintAssist.Hint="Повторите пароль"
+                    materialDesign:HintAssist.Foreground="#FF303F9F"
+                    materialDesign:TextFieldAssist.UnderlineBrush="#FF303F9F"
+                    Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Margin="21,0,0,-0.2" />
+                </Grid>
+
+                <StackPanel>
+                    <Button Margin="0,20,0,0"
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Content="Зарегистрироваться"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Width="250" Click="Button_Click" />
+                </StackPanel>
+            </StackPanel>
+
+        </Border>
+        <RadioButton Visibility="Hidden" x:Name="СheckAuth"  HorizontalAlignment="Left" Margin="30,10,0,0" VerticalAlignment="Top" IsChecked="True" Height="49"/>
+        <RadioButton Visibility="Hidden" x:Name="СheckReg"  HorizontalAlignment="Left" Margin="30,10,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

@@ -1,0 +1,1832 @@
+﻿<Window x:Class="CarSpending.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CarSpending"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="MainWindow" Height="750" Width="1330.8"
+        Background="#FF303F9F" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Loaded="MainWindow_OnLoaded"
+        >
+    <Window.Resources>
+        <Style x:Key="TextFromat">
+
+            <Setter Property="Control.FontSize" Value="24" />
+            <Setter Property="Control.Foreground" Value="#777" />
+            <Setter Property="Control.FontWeight" Value="Medium"></Setter>
+        </Style>
+        <Style x:Key="HeigtElem">
+            <Setter Property="Control.Height" Value="60"></Setter>
+            <Setter Property="Control.VerticalAlignment" Value="Center"></Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="23,10,10.2,0" Width="266" Height="70" >
+            <Image Source="./img/Лого.png" Height="54" Margin="34,0,87.6,0"/>
+
+
+            <Line Stroke="White" StrokeThickness="2" X1="0" X2="250" Y1="15" Y2="15"></Line>
+
+
+        </StackPanel>
+        <TabControl
+materialDesign:ColorZoneAssist.Mode="PrimaryDark"
+  VerticalContentAlignment="Top"
+  Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+   Grid.RowSpan="7" Grid.ColumnSpan="12" Grid.Row="1"   Margin="0,0,0.2,0.2" Background="#00FAFAFA" >
+            <TabItem Width="300"  >
+                <TabItem.Header>
+                    <StackPanel
+
+        Height="55"
+        Orientation="Horizontal" Width="248">
+                        <materialDesign:PackIcon
+          Kind="AccountCircle"
+          Width="51"
+          Height="38"
+          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,9,0,8.2" />
+                        <Separator Width="30" Background="Transparent"/>
+                        <TextBlock
+          Text="Профиль" VerticalAlignment="Center" Width="110"  Margin="0,15,0,8.2" HorizontalAlignment="Right" FontSize="24" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <materialDesign:Card
+                    Background="White"
+                    Padding="8"
+                    UniformCornerRadius="15" Margin="0,-39,20.6,-106.2">
+
+                    <Grid Margin="26,34,22.8,-0.6" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock x:Name="hiTitle" FontSize="24"  Grid.ColumnSpan="12" Text="Здравствуйте, Дмитрий!" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF777777"></TextBlock>
+                        <Line Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"  Grid.ColumnSpan="12" Margin="0,0,10,0.2"></Line>
+                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="12" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <TextBlock 
+                                FontSize="24"  
+                                Text="Основные характеристики авто" 
+                                HorizontalAlignment="Right" 
+                                VerticalAlignment="Center" 
+                                Foreground="#FF777777" 
+                                />
+
+                            <ComboBox
+                                    x:Name="ComboBoxCars"
+                                    Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                    IsEnabled="{Binding Path=IsChecked, ElementName=OutlinedComboBoxEnabledCheckBox}"
+                                    materialDesign:HintAssist.Hint="Выберите авто"
+                                    ItemsSource="{Binding ShortStringList}"
+                                    Width="256" Margin="10,0,0,0"
+                                    SelectionChanged="ComboBoxCars_OnSelected"
+                                    />
+                        </StackPanel>
+
+                        <materialDesign:Card
+                            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                            Grid.Row="3"
+                            Grid.RowSpan="8"
+                            Grid.ColumnSpan="12"
+                            Padding="35"
+                            >
+                            <Grid>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0.4,60">
+                                    <StackPanel Style="{StaticResource TextFromat}" Height="291" Margin="0,0,-0.4,0">
+                                        <TextBlock Style="{StaticResource HeigtElem}" Text="Марка:" />
+                                        <TextBlock Style="{StaticResource HeigtElem}" Text="VIN номер:" ></TextBlock>
+                                        <TextBlock Style="{StaticResource HeigtElem}" Text="Пробег:" ></TextBlock>
+                                        <TextBlock Style="{StaticResource HeigtElem}" Text="Объём бензобака:" ></TextBlock>
+
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource TextFromat}" Width="250" Height="291" Margin="50,0,0,0">
+                                        <TextBlock x:Name="carBrand_c" Style="{StaticResource HeigtElem}" Text="Данные не переданы" FontFamily="Segoe UI" />
+                                        <TextBlock x:Name="VIN_c" Style="{StaticResource HeigtElem}" Text="Данные не переданы" />
+                                        <TextBlock x:Name="mileage_c" Style="{StaticResource HeigtElem}" Text="Данные не переданы" />
+                                        <TextBlock x:Name="tankVolume_c" Style="{StaticResource HeigtElem}" Text="Данные не переданы" />
+
+                                    </StackPanel>
+                                    <Ellipse 
+                                        ToolTip="Нажмите для добавления изображения"
+                                        Stroke="#FF303F9F" 
+                                             StrokeThickness="3" 
+                                             PreviewMouseLeftButtonDown="Image_PreviewMouseLeftButtonDown" 
+                                             Margin="60,8,0,45" 
+                                             Width="255" >
+                                        <Ellipse.Effect>
+                                            <DropShadowEffect
+                                                ShadowDepth="10"
+                                                Direction="315"
+                                                Color="Black"
+                                                Opacity="0.4"
+                                                BlurRadius="20"/>
+                                        </Ellipse.Effect>
+                                        <Ellipse.Fill>
+                                            <ImageBrush x:Name="SelectImg" ImageSource="./img/CarImg.png" Stretch="UniformToFill"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+
+                                </StackPanel>
+                                <Grid Margin="0,297,0.4,0">
+                                    <Button
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
+                                        ToolTip="Нажмите для добавления автомобиля"
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Click="Button_Click">
+                                        <materialDesign:PackIcon
+                                            Kind="Car2Plus" Height="22" Width="22"
+                                            
+                                             />
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </materialDesign:Card>
+                    </Grid>
+                </materialDesign:Card>
+
+            </TabItem>
+
+            <TabItem Width="300" >
+                <TabItem.Header>
+                    <StackPanel
+                        Height="55"
+                        Orientation="Horizontal" Width="248">
+                        <materialDesign:PackIcon
+                            Kind="GasStation"
+                            Width="51"
+                            Height="38"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,9,0,8.2" />
+                        <Separator Width="30" Background="Transparent"/>
+                        <TextBlock
+                            Text="Заправка" VerticalAlignment="Center" Width="110"  Margin="0,15,0,8.2" HorizontalAlignment="Right" FontSize="24" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <materialDesign:Card
+                    Background="White"
+                    Padding="8"
+                    UniformCornerRadius="15" Margin="0,-39,20.6,-106.2">
+
+                    <Grid Margin="26,34,22.8,-0.6" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock  x:Name="fuelTitleText" FontSize="24"  Grid.ColumnSpan="12"  HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF777777"></TextBlock>
+                        <Line Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"  Grid.ColumnSpan="12" Margin="0,0,10,0.2"></Line>
+
+
+                        <materialDesign:Card
+                            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                            Grid.Row="2"
+                            Grid.RowSpan="9"
+                            Grid.ColumnSpan="10"
+                            Padding="35" Margin="2,0.4,75.733,0.4"
+                            >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Grid  VerticalAlignment="Center">
+
+                                    <materialDesign:PackIcon   Kind="CalendarMonthOutline" Height="45" Width="45" Foreground="#FF303F9F" VerticalAlignment="Center" Margin="0,14,0,19.8" Grid.Row="1" />
+                                    <DatePicker
+                                        
+                                        materialDesign:HintAssist.HelperText="Выберите дату"
+                                        x:Name="expenseDate_refill"
+                                        Margin="0,0,15,0"
+                                        Width="232"
+                                        FontSize="16"
+                                        materialDesign:HintAssist.Hint="дд.мм.гггг"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}" HorizontalAlignment="Right"  />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="1">
+
+                                    <materialDesign:PackIcon   Kind="Car" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="mileage_refill"
+                                        materialDesign:HintAssist.Hint="Введите пробег (km)"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Последние показатели"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                        />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="2">
+
+                                    <materialDesign:PackIcon   Kind="GasStation" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        IsReadOnly="True"
+                                        x:Name="inputTypeOfFuel"
+                                        materialDesign:HintAssist.Hint="Тип топлива"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Выберите тип топлива в правом блоке"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Column="1">
+
+                                    <materialDesign:PackIcon   Kind="CurrencyUsd" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <Grid Margin="50,0,-0.4,0.4">
+                                        <TextBox
+                                            x:Name="literCost_refill"
+                                            Margin="20,0,0,0"
+                                            materialDesign:HintAssist.Hint="Цена 1л"
+                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                            VerticalAlignment="Center" 
+                                            HorizontalAlignment="Left"  Width="86"
+
+                                        />
+
+                                        <TextBox
+                                            x:Name="amountLiters_refill"
+                                            Margin="0,0,15,0"
+                                            materialDesign:HintAssist.Hint="К-во литров"
+                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                            VerticalAlignment="Center"
+                                            Width="86" HorizontalAlignment="Right"
+                                        />
+                                    </Grid>
+
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="1" Grid.Column="1">
+
+                                    <materialDesign:PackIcon   Kind="MapMarker" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="location_refill"
+                                        materialDesign:HintAssist.Hint="Название или адресс заправки"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Не обязательное поле"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="2" Grid.Column="1">
+
+                                    <materialDesign:PackIcon   Kind="Check" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBlock FontSize="24" FontWeight="Bold" Foreground="#FF303F9F" Text="Полный бак" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                    <ToggleButton
+                                        x:Name="Fulltank_refill"
+                                        Margin="0,0,10,0"
+                                        Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
+                                        ToolTip="MaterialDesignSwitchDarkToggleButton"
+                                        IsChecked="False" HorizontalAlignment="Right" />
+
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+
+                                    <materialDesign:PackIcon   Kind="CommentText" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="comment_refill"
+                                        materialDesign:HintAssist.Hint="Комментарий (не обязательное поле)"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,21,15.2,20.4"
+                                        materialDesign:HintAssist.HelperText="Примечание к трате"
+                                        Width="548" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="144.4,26.4,0.2,26.4" >
+
+                                    <Button
+                                        Click="addNoteAboutRefill_click"
+                                        BorderThickness="2"
+                                        Style="{StaticResource MaterialDesignOutlinedDarkButton}"
+                                        ToolTip="Нажмите для добавления траты"
+                                        Content="Добавить запись"
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" VerticalAlignment="Center" />
+                                </Grid>
+
+
+                            </Grid>
+
+                        </materialDesign:Card>
+
+                        <materialDesign:Card
+                            Grid.Column="9"
+                            Grid.Row="2"
+                            Grid.ColumnSpan="3"
+                            Grid.RowSpan="9"
+                            Margin="20,0,0,0"
+                            Padding="15"
+                            >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.ColumnSpan="2" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F" Text="Типы топлива" HorizontalAlignment="Center" VerticalAlignment="Top"></TextBlock>
+                                <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"   ></Line>
+
+                                <ListBox Margin="0,15,0,0"
+                                         Grid.Row="1" Grid.ColumnSpan="2"  x:Name="typesOfFuel" SelectionChanged="typesOfFuel_SelectionChanged">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderThickness="2"
+                                                    CornerRadius="6"
+                                                    BorderBrush="Blue"
+                                                   >
+                                                <materialDesign:Card
+                                                    Padding="15,0,0,0"
+                                                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                                    materialDesign:ShadowAssist.ShadowEdges="Bottom,Right" >
+                                                    <RadioButton
+                                                        Width="170"
+                                                        Padding="15,10,60,10"
+                                                        Click="ButtonBase_OnClick"
+                                                        FontSize="14" FontWeight="Bold" Foreground="#FF303F9F"
+                                                        Content="{Binding Path= Fuel_title}"
+                                                        GroupName="TypesOfFuelRadios"
+                                                        Style="{StaticResource MaterialDesignRadioButton}"
+                                                        VerticalAlignment="Center" />
+
+
+                                                </materialDesign:Card>
+                                            </Border>
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+
+                            </Grid>
+
+                        </materialDesign:Card>
+
+
+
+                        <materialDesign:Snackbar
+                            Grid.ColumnSpan="4"
+                            Grid.Column="4"
+                            Grid.Row="10"
+                            Grid.RowSpan="2"
+                            MessageQueue="{materialDesign:MessageQueue}"
+                            x:Name="SnackbarTwo"
+                            IsActive="False"
+                            Margin="0,0,0,20">
+                           
+                        </materialDesign:Snackbar>
+
+                    </Grid>
+
+
+                </materialDesign:Card>
+            </TabItem>
+
+            <TabItem Width="300" >
+                <TabItem.Header>
+                    <StackPanel
+                        Height="55"
+                        Orientation="Horizontal" Width="248">
+                        <materialDesign:PackIcon
+                            Kind="CarWrench"
+                            Width="51"
+                            Height="38"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,9,0,8.2" />
+                        <Separator Width="30" Background="Transparent"/>
+                        <TextBlock
+                            Text="Сервис" VerticalAlignment="Center" Width="110"  Margin="0,15,0,8.2" HorizontalAlignment="Right" FontSize="24" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <materialDesign:Card
+                    Background="White"
+                    Padding="8"
+                    UniformCornerRadius="15" Margin="0,-39,20.6,-106.2">
+
+                    <Grid Margin="26,34,22.8,-0.6" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock  x:Name="serviceTitleText" FontSize="24"  Grid.ColumnSpan="12"  HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF777777"></TextBlock>
+                        <Line Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"  Grid.ColumnSpan="12" Margin="0,0,10,0.2"></Line>
+
+
+                        <materialDesign:Card
+                            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                            Grid.Row="2"
+                            Grid.RowSpan="9"
+                            Grid.ColumnSpan="10"
+                            Padding="35" Margin="2,0.4,75.733,0.4"
+                            >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Grid  VerticalAlignment="Center">
+
+                                    <materialDesign:PackIcon   Kind="CalendarMonthOutline" Height="45" Width="45" Foreground="#FF303F9F" VerticalAlignment="Center" Margin="0,14,0,19.8" Grid.Row="1" />
+                                    <DatePicker
+                                        x:Name="expenseDate_service"
+
+                                        materialDesign:HintAssist.HelperText="Выберите дату"
+                                        Margin="0,0,15,0"
+                                        Width="232"
+                                        FontSize="16"
+                                        materialDesign:HintAssist.Hint="дд.мм.гггг"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}" HorizontalAlignment="Right"  />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="1">
+
+                                    <materialDesign:PackIcon   Kind="Car" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="mileage_service"
+
+                                        materialDesign:HintAssist.Hint="Введите пробег (km)"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Последние показатели"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                        />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="2">
+
+                                    <materialDesign:PackIcon   Kind="Wrench" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="inputTypeOfServices"
+
+                                        IsReadOnly="True"
+                                        materialDesign:HintAssist.Hint="Вид сервиса"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Выберите виды сервиса в правом блоке"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Column="1">
+
+                                    <materialDesign:PackIcon   Kind="CurrencyUsd" 
+                                                           Height="45" 
+                                                           Width="45" 
+                                                           Foreground="#FF303F9F" 
+                                                           VerticalAlignment="Center" 
+                                                           Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        IsReadOnly="True"
+                                        x:Name="literCost_service"
+                                        materialDesign:HintAssist.Hint="Общая стоимость"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    VerticalAlignment="Center" 
+                                    Margin="0,0,15,0"
+                                    materialDesign:HintAssist.HelperText="Рассчитывается автоматически"
+                                    Width="232" HorizontalAlignment="Right"
+
+                                />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="1" Grid.Column="1">
+
+                                    <materialDesign:PackIcon   Kind="MapMarker" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="location_service"
+
+                                        materialDesign:HintAssist.Hint="Название или адресс сервисного центра"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Не обязательное поле"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+
+                                    <materialDesign:PackIcon   Kind="CommentText" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="comment_service"
+
+                                        materialDesign:HintAssist.Hint="Комментарий (не обязательное поле)"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,21,15.2,20.4"
+                                        materialDesign:HintAssist.HelperText="Примечание к трате"
+                                        Width="548" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="144.4,26.4,0.2,26.4" >
+
+                                    <Button
+                                        Click="addNoteAboutService_click"
+                                        BorderThickness="2"
+                                        Style="{StaticResource MaterialDesignOutlinedDarkButton}"
+                                        ToolTip="Нажмите для добавления траты"
+                                        Content="Добавить запись"
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" VerticalAlignment="Center" />
+                                </Grid>
+
+
+                            </Grid>
+
+                        </materialDesign:Card>
+
+                        <materialDesign:Card
+                            Grid.Column="9"
+                            Grid.Row="2"
+                            Grid.ColumnSpan="3"
+                            Grid.RowSpan="9"
+                            Margin="20,0,0,0"
+                            Padding="15"
+                            >
+                            <Grid 
+                             VerticalAlignment="Top" Height="462"
+                            >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.ColumnSpan="2" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F" Text="Виды сервиса" HorizontalAlignment="Center" VerticalAlignment="Top"></TextBlock>
+                                <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"   ></Line>
+
+                                <ListBox Margin="0,10,-0.8,0.4"
+                                         LostFocus="LostFocuse"
+
+                                        x:Name="serviceType_list"
+                                         Height="360"
+                                         Grid.Row="1" Grid.ColumnSpan="2"  SelectionChanged="ServiceType_list_OnSelectionChanged"  VerticalAlignment="Top">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border
+                                                Width="165"
+                                    BorderThickness="2"
+                                        CornerRadius="6"
+                                        BorderBrush="Blue"
+                                        Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top"
+                                >
+                                                <materialDesign:Card
+                                        Padding="15,0"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                        materialDesign:ShadowAssist.ShadowEdges="Bottom,Right" >
+                                                    <Grid>
+                                                        <Grid VerticalAlignment="Top"
+                                                  Margin="0,10,0,0"
+                                                  >
+                                                            <CheckBox
+                                                                Click="activeCheckBoxService_click"
+                                                IsChecked="False"
+                                                Content="{Binding Path= Favor_name}"
+                                                Foreground="Gray"
+                                                Padding="10,0,0,0"
+                                                Style="{StaticResource MaterialDesignDarkCheckBox}" Margin="0,0,10.2,-0.4" />
+                                                        </Grid>
+                                                        <Grid 
+                                                            Margin="0,20"
+                                                            VerticalAlignment="Bottom" >
+                                                            <TextBox
+                                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                                    VerticalAlignment="Center" 
+                                                    FontSize="12"
+                                                    HorizontalAlignment="Left"  Width="60"
+                                                    Text="{Binding Path=FavorCost_num}"
+                                                    materialDesign:HintAssist.HelperText="Стоимость"
+                                                />
+
+                                                            <TextBox
+                                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}" 
+                                                    FontSize="12"
+                                                    HorizontalAlignment="Right"  Width="60"
+                                                    Text="{Binding Path=Favor_num}"
+                                                    materialDesign:HintAssist.HelperText="К-во"
+
+                                                />
+
+
+                                                        </Grid>
+                                                    </Grid>
+                                                </materialDesign:Card>
+                                            </Border>
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Button
+                                    Margin="0,0,0,10"
+                                   Width="120"
+                                    Click="AddNewTypeService_Click"
+                                Grid.Row="1"
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="2"
+                                Style="{StaticResource MaterialDesignFlatDarkBgButton}"
+                                ToolTip="Нажмите для добавления нового вида траты"
+                                Content="+ Новый вид"
+                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" VerticalAlignment="Bottom" HorizontalAlignment="Left"  />
+
+                            </Grid>
+
+                        </materialDesign:Card>
+
+                        <materialDesign:Snackbar
+                            Grid.ColumnSpan="4"
+                            Grid.Column="4"
+                            Grid.Row="10"
+                            Grid.RowSpan="2"
+                            MessageQueue="{materialDesign:MessageQueue}"
+                            x:Name="SnackbarService"
+                            IsActive="False"
+                            Margin="0,0,0,20">
+
+                        </materialDesign:Snackbar>
+
+                    </Grid>
+                </materialDesign:Card>
+            </TabItem>
+
+            <TabItem Width="300" >
+                <TabItem.Header>
+                    <StackPanel
+                        Height="55"
+                        Orientation="Horizontal" Width="248">
+                        <materialDesign:PackIcon
+                            Kind="CashPlus"
+                            Width="51"
+                            Height="38"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,9,0,8.2" />
+                        <Separator Width="30" Background="Transparent"/>
+                        <TextBlock
+                            Text="Доход" VerticalAlignment="Center" Width="110"  Margin="0,15,0,8.2" HorizontalAlignment="Right" FontSize="24" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <materialDesign:Card
+                    Background="White"
+                    Padding="8"
+                    UniformCornerRadius="15" Margin="0,-39,20.6,-106.2">
+
+                    <Grid Margin="26,34,22.8,-0.6" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock  x:Name="profitTitleText" FontSize="24"  Grid.ColumnSpan="12"  HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF777777"></TextBlock>
+                        <Line Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"  Grid.ColumnSpan="12" Margin="0,0,10,0.2"></Line>
+
+
+                        <materialDesign:Card
+                            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                            Grid.Row="2"
+                            Grid.RowSpan="9"
+                            Grid.ColumnSpan="10"
+                            Padding="35" Margin="2,0.4,75.733,0.4"
+                            >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Grid  VerticalAlignment="Center">
+
+                                    <materialDesign:PackIcon   Kind="CalendarMonthOutline" Height="45" Width="45" Foreground="#FF303F9F" VerticalAlignment="Center" Margin="0,14,0,19.8" Grid.Row="1" />
+                                    <DatePicker
+                                        
+                                        materialDesign:HintAssist.HelperText="Выберите дату"
+                                        x:Name="expenseDate_profit"
+                                        Margin="0,0,15,0"
+                                        Width="232"
+                                        FontSize="16"
+                                        materialDesign:HintAssist.Hint="дд.мм.гггг"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}" HorizontalAlignment="Right"  />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="1">
+
+                                    <materialDesign:PackIcon   Kind="Car" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="mileage_profit"
+                                        materialDesign:HintAssist.Hint="Введите пробег (km)"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Последние показатели"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                        />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="1"
+                                       Grid.Column="1">
+
+                                    <materialDesign:PackIcon   Kind="CashPlus" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        IsReadOnly="True"
+                                        x:Name="inputTypeOfProfit"
+                                        materialDesign:HintAssist.Hint="Тип дохода"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Выберите тип дохода в правом блоке"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Column="1">
+
+                                    <materialDesign:PackIcon   Kind="CurrencyUsd" 
+                                                           Height="45" 
+                                                           Width="45" 
+                                                           Foreground="#FF303F9F" 
+                                                           VerticalAlignment="Center" 
+                                                           Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        IsReadOnly="false"
+                                        x:Name="literCost_profit"
+                                        materialDesign:HintAssist.Hint="Общая стоимость"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    VerticalAlignment="Center" 
+                                    Margin="0,0,15,0"
+                                    materialDesign:HintAssist.HelperText="Запишите размер прибыли"
+                                    Width="232" HorizontalAlignment="Right"
+
+                                />
+                                </Grid>
+
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+
+                                    <materialDesign:PackIcon   Kind="CommentText" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="comment_profit"
+                                        materialDesign:HintAssist.Hint="Комментарий (не обязательное поле)"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,21,15.2,20.4"
+                                        materialDesign:HintAssist.HelperText="Примечание к прибыли"
+                                        Width="548" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="144.4,26.4,0.2,26.4" >
+
+                                    <Button
+                                        Click="AddNoteAboutProfit_click"
+                                        BorderThickness="2"
+                                        Style="{StaticResource MaterialDesignOutlinedDarkButton}"
+                                        ToolTip="Нажмите для добавления записи об прибыли"
+                                        Content="Добавить запись"
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" VerticalAlignment="Center" />
+                                </Grid>
+
+
+                            </Grid>
+
+                        </materialDesign:Card>
+
+                        <materialDesign:Card
+                            Grid.Column="9"
+                            Grid.Row="2"
+                            Grid.ColumnSpan="3"
+                            Grid.RowSpan="9"
+                            Margin="20,0,0,0"
+                            Padding="15"
+                            >
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.ColumnSpan="2" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F" Text="Вид дохода" HorizontalAlignment="Center" VerticalAlignment="Top"></TextBlock>
+                                <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"   ></Line>
+
+                                <ListBox Margin="0,15,0,0"
+                                         Height="360"
+                                         Grid.Row="1" Grid.ColumnSpan="2"  x:Name="typeOfProfit" SelectionChanged="TypeOfProfit_OnSelectionChanged" VerticalAlignment="Top">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderThickness="2"
+                                                    CornerRadius="6"
+                                                    BorderBrush="Blue"
+                                                   >
+                                                <materialDesign:Card
+                                                    Padding="15,0,0,0"
+                                                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                                    materialDesign:ShadowAssist.ShadowEdges="Bottom,Right" >
+                                                    <RadioButton
+                                                        Width="170"
+                                                        Padding="15,10,60,10"
+                                                        Click="ButtonBaseProfit_OnClick"
+                                                        FontSize="14" FontWeight="Bold" Foreground="#FF303F9F"
+                                                        Content="{Binding Path= ProfitType_title}"
+                                                        ToolTip="{Binding Path= ProfitType_title}"
+                                                        GroupName="typeOfProfit_radios"
+                                                        Style="{StaticResource MaterialDesignRadioButton}"
+                                                        VerticalAlignment="Center" />
+
+
+                                                </materialDesign:Card>
+                                            </Border>
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Button
+                                    Margin="0,0,0,10"
+                                    Width="120"
+Click="addNewTypeProfit_click"
+                                    Grid.Row="1"
+                                    Grid.RowSpan="2"
+                                    Grid.ColumnSpan="2"
+                                    Style="{StaticResource MaterialDesignFlatDarkBgButton}"
+                                    ToolTip="Нажмите для добавления нового вида траты"
+                                    Content="+ Новый вид"
+                                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" VerticalAlignment="Bottom" HorizontalAlignment="Left"  />
+
+
+                            </Grid>
+
+                        </materialDesign:Card>
+
+
+
+                        <materialDesign:Snackbar
+                            Grid.ColumnSpan="4"
+                            Grid.Column="4"
+                            Grid.Row="10"
+                            Grid.RowSpan="2"
+                            MessageQueue="{materialDesign:MessageQueue}"
+                            x:Name="SnackbarProfit"
+                            IsActive="False"
+                            Margin="0,0,0,20">
+
+                        </materialDesign:Snackbar>
+
+                    </Grid>
+
+
+                </materialDesign:Card>
+            </TabItem>
+
+            <TabItem Width="300" >
+                <TabItem.Header>
+                    <StackPanel
+                        Height="55"
+                        Orientation="Horizontal" Width="248">
+                        <materialDesign:PackIcon
+                            Kind="ChartBox"
+                            Width="51"
+                            Height="38"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,9,0,8.2" />
+                        <Separator Width="30" Background="Transparent"/>
+                        <TextBlock
+                            Text="Статистика" VerticalAlignment="Center" Width="131"  Margin="0,18,0,11.2" HorizontalAlignment="Right" FontSize="24" />
+                    </StackPanel>
+                </TabItem.Header>
+                <materialDesign:Card
+                    Background="White"
+                    Padding="8"
+                    UniformCornerRadius="15" Margin="0,-39,20.6,-106.2">
+
+                    <Grid Margin="26,34,22.8,-0.6" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock  x:Name="statisticTitleText" FontSize="24"  Grid.ColumnSpan="12"  HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF777777"></TextBlock>
+                        <Line Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"  Grid.ColumnSpan="12" Margin="0,0,10,0.2"></Line>
+
+
+                        <TabControl
+                            Margin="0,15,0,0"
+                            Grid.Row="1"
+                            Grid.RowSpan="12"
+                            Grid.ColumnSpan="9"
+                            
+                            TabStripPlacement="Top"
+                            Style="{StaticResource MaterialDesignNavigatilRailTabControl}"
+                           
+                            >
+                            <TabItem Height="32" Width="190">
+                                
+                                <TabItem.Header>
+                                    <StackPanel>
+
+                                        <TextBlock
+                                            Text="Список трат"
+                                            HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </TabItem.Header>
+
+                                <materialDesign:Card
+                                    Background="White"
+
+                                    Padding="8"
+                                    UniformCornerRadius="15" Margin="0,22,-2,-5">
+
+                                    <Grid Margin="26,34,22.8,-0.6" >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition/>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+
+                                        <Grid Grid.ColumnSpan="12"
+                                                    Grid.RowSpan="2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Grid >
+                                                <materialDesign:PackIcon Kind="CalendarMonthOutline" />
+                                                <TextBlock Text="дата"></TextBlock>
+                                            </Grid>
+                                        </Grid>
+                                        </Grid>
+                                </materialDesign:Card>
+
+                            </TabItem>
+
+                            <TabItem Height="32" Width="190">
+
+                                <TabItem.Header>
+                                    <StackPanel>
+
+                                        <TextBlock
+                                            Text="Заправки"
+                                            HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </TabItem.Header>
+
+                            </TabItem>
+
+                            <TabItem Height="32" Width="190">
+
+                                <TabItem.Header>
+                                    <StackPanel>
+
+                                        <TextBlock
+                                            Text="Сервис"
+                                            HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </TabItem.Header>
+
+                            </TabItem>
+
+                            <TabItem Height="32" Width="190">
+
+                                <TabItem.Header>
+                                    <StackPanel>
+
+                                        <TextBlock
+                                            Text="Доходы"
+                                            HorizontalAlignment="Center" />
+                                    </StackPanel>
+                                </TabItem.Header>
+
+                            </TabItem>
+
+                        </TabControl>
+
+                        <!--<materialDesign:Card
+                            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                            Grid.Row="2"
+                            Grid.RowSpan="9"
+                            Grid.ColumnSpan="9"
+                            Padding="35" Margin="2,0.4,75.733,0.4"
+                            >
+                            </materialDesign:Card>
+
+                        <materialDesign:Card
+                            Grid.Column="8"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                            Grid.RowSpan="9"
+                            Grid.Row="2"
+                            Margin="15,0,0,0"
+                            Grid.ColumnSpan="4"
+                        >
+
+                        </materialDesign:Card>-->
+                            </Grid>
+
+
+                </materialDesign:Card>
+
+            </TabItem>
+
+            <TabItem Width="300" >
+                <TabItem.Header>
+                    <StackPanel
+                        Height="55"
+                        Orientation="Horizontal" Width="248">
+                        <materialDesign:PackIcon
+                            Kind="ClipboardCheck"
+                            Width="51"
+                            Height="38"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,9,0,8.2" />
+                        <Separator Width="30" Background="Transparent"/>
+                        <TextBlock
+                            Text="Напоминания" VerticalAlignment="Center" Width="164"  Margin="0,18,0,11.2" HorizontalAlignment="Right" FontSize="24" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <materialDesign:Card
+                    Background="White"
+                    Padding="8"
+                    UniformCornerRadius="15" Margin="0,-39,20.6,-106.2">
+
+                    <Grid Margin="26,34,22.8,-0.6" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock  x:Name="reminderTitleText" FontSize="24"  Grid.ColumnSpan="12"  HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF777777"></TextBlock>
+                        <Line Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"  Grid.ColumnSpan="12" Margin="0,0,10,0.2"></Line>
+
+
+                        <materialDesign:Card
+                            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                            Grid.Row="2"
+                            Grid.RowSpan="9"
+                            Grid.ColumnSpan="6"
+                            Padding="70,35" 
+                            >
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+
+                                <Grid  VerticalAlignment="Center">
+
+                                    <materialDesign:PackIcon   Kind="CalendarMonthOutline" Height="45" Width="45" Foreground="#FF303F9F" VerticalAlignment="Center" Margin="0,14,0,19.8" Grid.Row="1" />
+                                    <DatePicker
+                                        x:Name="expenseDate_reminders"
+
+                                        materialDesign:HintAssist.HelperText="Выберите дату отображения напоминания"
+                                        Margin="0,0,15,0"
+                                        Width="232"
+                                        FontSize="16"
+                                        materialDesign:HintAssist.Hint="дд.мм.гггг"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}" HorizontalAlignment="Right"  />
+                                </Grid>
+
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="1">
+
+                                    <materialDesign:PackIcon   Kind="FormatColorText" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="tittle_remiders"
+
+                                        IsReadOnly="False"
+                                        materialDesign:HintAssist.Hint="Заглавие"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,0,15,0"
+                                        materialDesign:HintAssist.HelperText="Текст служит заглавием напоминания"
+                                        Width="232" HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="2" >
+
+                                    <materialDesign:PackIcon   Kind="CommentText" 
+                                                               Height="45" 
+                                                               Width="45" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="0,14,0,19.8" />
+                                    <TextBox
+                                        x:Name="comment_reminders"
+                                        Width="232"
+                                        materialDesign:HintAssist.Hint="Комментарий (не обязательное поле)"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        VerticalAlignment="Center" 
+                                        Margin="0,21,15.2,20.4"
+                                        materialDesign:HintAssist.HelperText="Комментарий к напоминанию"
+                                         HorizontalAlignment="Right"
+
+                                    />
+                                </Grid>
+
+                                <Grid  VerticalAlignment="Center" Grid.Row="3"  >
+
+                                    <Button
+                                        Width="175"
+Click="AddNewRemider_click"
+                                        BorderThickness="2"
+                                        Style="{StaticResource MaterialDesignOutlinedDarkButton}"
+                                        ToolTip="Нажмите для добавления траты"
+                                        Content="Добавить запись"
+                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" VerticalAlignment="Center" />
+                                </Grid>
+
+
+                            </Grid>
+
+                        </materialDesign:Card>
+
+                        <materialDesign:Card
+                            Grid.Column="6"
+                            Grid.Row="2"
+                            Grid.ColumnSpan="6"
+                            Grid.RowSpan="9"
+                            Margin="30,0,0,0"
+                            Padding="15"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth3"
+
+                            >
+                            <Grid 
+                             VerticalAlignment="Top" Height="462"
+                            >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.ColumnSpan="2" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F" Text="Ваши напоминания" HorizontalAlignment="Center" VerticalAlignment="Top"></TextBlock>
+                                <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"   ></Line>
+
+
+                               
+
+                                <ListBox Margin="0,10,-0.8,0.4"
+                                
+                                         x:Name="reminders_list"
+                                         Height="360"
+                                         Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid VerticalAlignment="Center">
+                                            <Border
+                                                Margin="0,0,25,0"
+                                                BorderThickness="2"
+                                                CornerRadius="6"
+                                                BorderBrush="Blue"
+                                                Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top">
+                                                <materialDesign:Card
+                                                    Padding="15,0"
+                                                    materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                                    materialDesign:ShadowAssist.ShadowEdges="Bottom,Right">
+                                                    <Grid>
+                                                        <materialDesign:PackIcon Foreground="#FF303F9F"
+                                                            Kind="CheckCircleOutline" Height="29" Width="29"
+                                                            VerticalAlignment="Center" />
+                                                        <Expander
+                                                            MinWidth="315"
+                                                            Margin="34,0,0,0"
+                                                            HorizontalAlignment="Stretch"
+                                                            ToolTip="{Binding Path=Reminder_date}"
+                                                            Header="{Binding Path= Reminder_title}"
+
+                                                            >
+                                                            <StackPanel
+                                                                materialDesign:HintAssist.HelperText="qweqwe"
+
+                                                                Orientation="Vertical"
+                                                                TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                                                Margin="24,8,24,16">
+                                                                <TextBlock
+                                                                    Text="{Binding Path= Comment}" 
+                                                                    />
+                                                               
+                                                            </StackPanel>
+                                                        </Expander>
+                                                        
+                                                    </Grid>
+                                                </materialDesign:Card>
+                                                </Border>
+                                                    <materialDesign:PackIcon 
+                                                        Foreground="DarkRed"
+                                                        materialDesign:HintAssist.HelperText="{Binding Path= Reminder_id}"
+
+                                                        Margin="15,0,0,0" Kind="Delete" VerticalAlignment="Center" HorizontalAlignment="Right" PreviewMouseLeftButtonDown="PackIcon_PreviewMouseLeftButtonDown"/>
+
+                                            </Grid>
+
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+
+                            </Grid>
+
+                        </materialDesign:Card>
+
+                        <materialDesign:Snackbar
+                            Grid.ColumnSpan="4"
+                            Grid.Column="4"
+                            Grid.Row="10"
+                            Grid.RowSpan="2"
+                            MessageQueue="{materialDesign:MessageQueue}"
+                            x:Name="SnackbarReminder"
+                            IsActive="False"
+                            Margin="0,0,0,20">
+
+                        </materialDesign:Snackbar>
+
+                    </Grid>
+                </materialDesign:Card>
+
+            </TabItem>
+
+            <TabItem Width="300" >
+                <TabItem.Header>
+                    <StackPanel
+                        Height="55"
+                        Orientation="Horizontal" Width="248">
+                        <materialDesign:PackIcon
+                            Kind="HelpCircle"
+                            Width="51"
+                            Height="38"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,9,0,8.2" />
+                        <Separator Width="30" Background="Transparent"/>
+                        <TextBlock
+                            Text="Помощь" VerticalAlignment="Center" Width="164"  Margin="0,18,0,11.2" HorizontalAlignment="Right" FontSize="24" />
+                    </StackPanel>
+                </TabItem.Header>
+
+                <materialDesign:Card
+                    Background="White"
+                    Padding="8"
+                    UniformCornerRadius="15" Margin="0,-39,20.6,-106.2">
+
+                    <Grid Margin="26,34,22.8,-0.6" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock  Text="Часто возникающие вопросы" FontSize="24"  Grid.ColumnSpan="12"  HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF777777"></TextBlock>
+                        <Line Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"  Grid.ColumnSpan="12" Margin="0,0,10,0.2"></Line>
+
+                <materialDesign:Card
+                    Grid.ColumnSpan="12"
+                    Grid.Row="2"
+                    Grid.RowSpan="10"
+                >
+                    <Grid>
+                        <materialDesign:Card>
+                            <ScrollViewer>
+
+<StackPanel>
+
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Как добавить автомобиль?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                                <TextBlock>
+                                                    <Run Text="1. В левом меню выберите «Профиль»"/><LineBreak/>
+                                                    <Run Text="2. В правом нижнем углу нажмите на кнопку"/><LineBreak/>
+                                                    <Run Text="3. Заполните все поля и нажмите кнопку «Добавить авто»"/><LineBreak/>
+                                                </TextBlock>
+                                           
+                                        
+                                    </StackPanel>
+                                </Expander>
+
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Как добавить изображение автомобилю?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Профиль»"/><LineBreak/>
+                                            <Run Text="2. Нажмите на иконку изображения, в правой части окна"/><LineBreak/>
+                                            <Run Text="3. Выберите нужное изображение на компьютере»"/><LineBreak/>
+                                        </TextBlock>
+
+
+                                    </StackPanel>
+                                </Expander>
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Как изменить изображение автомобилю?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Профиль»"/><LineBreak/>
+                                            <Run Text="2. Нажмите на текущее изображение авто"/><LineBreak/>
+                                            <Run Text="3. Выберите нужное изображение на компьютере»"/><LineBreak/>
+                                        </TextBlock>
+
+
+                                    </StackPanel>
+                                </Expander>
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Как переключаться между автомобилями?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Профиль»"/><LineBreak/>
+                                            <Run Text="2. В верхней части экрана в выпадающем списке выберите нужный автомобиль"/><LineBreak/>
+                                            <Run Text="3. При условии, вы добавили несколько изображений - приложение примет изменение"/><LineBreak/>
+                                        </TextBlock>
+
+
+                                    </StackPanel>
+                                </Expander>
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Как добавить запись траты в приложение?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Заправка» или «Сервис», в зависимости от типа траты"/><LineBreak/>
+                                            <Run Text="2. Заполните все обязательные поля в открытом окне"/><LineBreak/>
+                                            <Run Text="3. Нажмите кнопку «Добавить запись»"/><LineBreak/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Expander>
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Как добавить запись об прибыли в приложение?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Доход»"/><LineBreak/>
+                                            <Run Text="2. Заполните все обязательные поля в открытом окне"/><LineBreak/>
+                                            <Run Text="3. Не забудьте выбрать вид дохода в блоке справа"/><LineBreak/>
+                                            <Run Text="4. Нажмите кнопку «Добавить запись»"/><LineBreak/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Expander>
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Что делать если нет нужного вида сервиса?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Сервис»"/><LineBreak/>
+                                            <Run Text="2. В блоке справа нажмите на кнопку «Новый вид»"/><LineBreak/>
+                                            <Run Text="3. В открытом окне заполните единственное поле"/><LineBreak/>
+                                            <Run Text="4. Нажмите кнопку «Добавить»"/><LineBreak/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Expander>
+
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Что делать если нет нужного вида дохода?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Доход»"/><LineBreak/>
+                                            <Run Text="2. В блоке справа нажмите на кнопку «Новый вид»"/><LineBreak/>
+                                            <Run Text="3. В открытом окне заполните единственное поле"/><LineBreak/>
+                                            <Run Text="4. Нажмите кнопку «Добавить»"/><LineBreak/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Expander>
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Как добавить напоминание?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Напоминания»"/><LineBreak/>
+                                            <Run Text="2. Заполните обязательные поля"/><LineBreak/>
+                                            <Run Text="3. Нажмите на кнопку «Добавить запись»"/><LineBreak/>
+                                            <Run Text="4. Запись появится в блоке «Ваши напоминания»"/><LineBreak/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Expander>
+                                <Expander
+                                    HorizontalAlignment="Stretch"
+                                    Header="Как удалить напоминание?">
+                                    <StackPanel
+                                        Orientation="Vertical"
+                                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                        Margin="24,8,24,16">
+                                        <TextBlock>
+                                            <Run Text="1. В левом меню выберите «Напоминания»"/><LineBreak/>
+                                            <Run Text="2. В блоке «Ваши напоминания» найдите нужное"/><LineBreak/>
+                                            <Run Text="3. Нажмите на иконку, символизирующую удаление»"/><LineBreak/>
+                                            <Run Text="4. подтвердите свои действия»"/><LineBreak/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Expander>
+
+                                    </StackPanel>
+</ScrollViewer>
+                        </materialDesign:Card>
+                            </Grid>
+                </materialDesign:Card>
+
+
+                    </Grid>
+                </materialDesign:Card>
+
+            </TabItem>
+
+            <TabItem Width="300" PreviewMouseLeftButtonDown="TabItem_PreviewMouseLeftButtonDown">
+                <TabItem.Header >
+                    <StackPanel
+                        
+                        Height="55"
+                        Orientation="Horizontal" Width="248">
+                        <materialDesign:PackIcon
+                            Kind="ExitToApp"
+                            Width="51"
+                            Height="38"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,9,0,8.2" />
+                        <Separator Width="30" Background="Transparent"/>
+                        <TextBlock
+                            Text="Выход" VerticalAlignment="Center" Width="164"  Margin="0,18,0,11.2" HorizontalAlignment="Right" FontSize="24" />
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+
+</Window>
