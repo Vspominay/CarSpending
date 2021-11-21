@@ -41,6 +41,8 @@ namespace CarSpending
         public ObservableCollection<TypeOfserviceItem> TypeOfserviceItems { get; set; }
         public ObservableCollection<ProfitType> ProfitTypes { get; set; }
         public ObservableCollection<Reminder> RemindersList { get; set; }
+        public ObservableCollection<Expense> ExpensesList { get; set; }
+
 
 
 
@@ -79,6 +81,8 @@ namespace CarSpending
             pushIntoListbox(FuelTypes, typesOfFuel, db.FuelTypes); //push type services into listbox
             pushIntoListbox(ProfitTypes, typeOfProfit, db.ProfitTypes); //push profit types into listbox
             pushIntoListbox(RemindersList, reminders_list, db.Reminders); //push reminders into listbox
+
+
         }
 
         public void pushIntoListbox<T>(ObservableCollection<T> observableCollection, ListBox listBox,DbSet dbSet)
@@ -137,7 +141,7 @@ namespace CarSpending
                                    userCars[ComboBoxCars.SelectedIndex].CarBrand;
             reminderTitleText.Text = "Добавление нового напоминания для пользователя " + user.First_name;
             statisticTitleText.Text =
-                "просмотр статистики для автомобиля " + userCars[ComboBoxCars.SelectedIndex].CarBrand;
+                "Просмотр статистики для автомобиля " + userCars[ComboBoxCars.SelectedIndex].CarBrand;
 
             if (ComboBoxCars.SelectedIndex != -1 && userCars[ComboBoxCars.SelectedIndex].Image_id != 0)
             {
