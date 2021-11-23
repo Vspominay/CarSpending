@@ -502,7 +502,7 @@ materialDesign:ColorZoneAssist.Mode="PrimaryDark"
                             x:Name="SnackbarTwo"
                             IsActive="False"
                             Margin="0,0,0,20">
-                           
+
                         </materialDesign:Snackbar>
 
                     </Grid>
@@ -1115,7 +1115,7 @@ Click="addNewTypeProfit_click"
                 </materialDesign:Card>
             </TabItem>
 
-            <TabItem Width="300" >
+            <TabItem Width="300" MouseUp="TabItem_PreviewMouseLeftButtonDown_1">
                 <TabItem.Header>
                     <StackPanel
                         Height="55"
@@ -1181,7 +1181,7 @@ Click="addNewTypeProfit_click"
                            
                             >
                             <TabItem Height="32" Width="190">
-                                
+
                                 <TabItem.Header>
                                     <StackPanel>
 
@@ -1197,7 +1197,7 @@ Click="addNewTypeProfit_click"
                                     Padding="8"
                                     UniformCornerRadius="15" Margin="0,22,-2,-5">
 
-                                    <Grid Margin="26,34,22.8,-0.6" >
+                                    <Grid Margin="26,34,0,-0.6" >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition/>
                                             <ColumnDefinition/>
@@ -1262,8 +1262,8 @@ Click="addNewTypeProfit_click"
                                                                              Width="20" HorizontalAlignment="Right" />
 
                                                 </Grid>
-                                                
-                                            <TextBlock Margin="5,0,0,0" FontSize="16" Foreground="Gray" Text="тип траты" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
+
+                                                <TextBlock Margin="5,0,0,0" FontSize="16" Foreground="Gray" Text="тип траты" HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
                                             </StackPanel>
 
                                             <StackPanel Orientation="Horizontal" Grid.Column="5" Grid.ColumnSpan="4" VerticalAlignment="Center" >
@@ -1276,22 +1276,24 @@ Click="addNewTypeProfit_click"
                                             </Line>
                                             <Grid Grid.Column="9" Grid.ColumnSpan="3" Margin="25,0,0,0"
                                                   VerticalAlignment="Center">
-                                                <StackPanel ToolTip="Поиск по тратам">
+                                                <StackPanel PreviewMouseLeftButtonDown="SearchNotesinExpenses" ToolTip="Поиск по тратам">
                                                     <materialDesign:PackIcon Kind="Magnify" Foreground="#FF303F9F"
                                                                              Width="30" Height="30" />
                                                 </StackPanel>
 
-                                                <StackPanel ToolTip="Фильтрация по времени"
+                                                <StackPanel 
+                                                    PreviewMouseLeftButtonDown="selectRadiusDateOpen_click"
+                                                    ToolTip="Фильтрация по времени"
                                                             HorizontalAlignment="Center">
                                                     <materialDesign:PackIcon Kind="CalendarMonthOutline"
                                                                              Foreground="#FF303F9F" Width="30"
                                                                              Height="30" />
                                                 </StackPanel>
-                                                <StackPanel ToolTip="Сортировка" HorizontalAlignment="Right">
+                                                <StackPanel PreviewMouseLeftButtonDown="sorttedExpenses_click" ToolTip="Сортировка" HorizontalAlignment="Right">
                                                     <materialDesign:PackIcon Kind="SortVariant" Foreground="#FF303F9F"
                                                                              Width="30" Height="30" />
                                                 </StackPanel>
-                                               
+
 
                                             </Grid>
 
@@ -1300,9 +1302,10 @@ Click="addNewTypeProfit_click"
                                               X1="0" X2="950" Grid.ColumnSpan="12">
                                         </Line>
 
+
                                         <ListBox
 x:Name="listOfExpenses"
-                                            Grid.Row="2" Grid.ColumnSpan="12" Grid.RowSpan="3" VerticalAlignment="Top">
+                                            Grid.Row="2" Grid.ColumnSpan="12" Grid.RowSpan="10" VerticalAlignment="Top">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid
@@ -1323,23 +1326,37 @@ x:Name="listOfExpenses"
                                                         </Grid.ColumnDefinitions>
 
 
-                                                        <Grid Grid.ColumnSpan="2" VerticalAlignment="Center">
+                                                        <StackPanel Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                                                             <TextBlock Margin="5,0,0,0" FontSize="16" Foreground="Gray"
-                                                                       Text="29.10.2021"
+                                                                       Text="{Binding Path= Expense_date}"
                                                                        HorizontalAlignment="center"
                                                                        VerticalAlignment="Center">
                                                             </TextBlock>
-                                                        </Grid>
+                                                        </StackPanel>
 
-                                                        <Grid Grid.ColumnSpan="3" Grid.Column="2">
-                                                            <materialDesign:PackIcon Kind="Wrench"
+
+                                                        <StackPanel Margin="40,0,70,0" Grid.ColumnSpan="3" Grid.Column="2" VerticalAlignment="Center">
+
+
+                                                            <materialDesign:PackIcon
                                                                 Foreground="#FF303F9F" VerticalAlignment="Center"
-                                                                Height="40" Width="40" HorizontalAlignment="Center" />
+                                                                Height="40" Width="40" HorizontalAlignment="Center" >
+                                                                <materialDesign:PackIcon.Style>
+                                                                    <Style TargetType="materialDesign:PackIcon">
+                                                                        <Setter Property="Kind"  Value="Wrench"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger Binding="{Binding Service_id}" Value="-1">
+                                                                                <Setter Property="Kind" Value="GasStation"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </materialDesign:PackIcon.Style>
+                                                            </materialDesign:PackIcon>
 
-                                                        </Grid>
+                                                        </StackPanel>
 
-                                                        <materialDesign:Card Grid.Column="5" Grid.ColumnSpan="7"
-                                                                             UniformCornerRadius="15" Padding="15">
+                                                        <materialDesign:Card Width="364"  Grid.Column="5" Grid.ColumnSpan="7"
+                                                                             UniformCornerRadius="10" Padding="10">
                                                             <Grid>
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition />
@@ -1353,44 +1370,52 @@ x:Name="listOfExpenses"
                                                                     <RowDefinition />
                                                                     <RowDefinition />
                                                                 </Grid.RowDefinitions>
-                                                                <StackPanel HorizontalAlignment="Left"
+                                                                <StackPanel HorizontalAlignment="Left" Margin="10,0,0,0"
                                                                             VerticalAlignment="Top"
                                                                             Grid.ColumnSpan="3">
                                                                     <TextBlock HorizontalAlignment="Left" FontSize="12"
                                                                                FontWeight="Bold">
                                                                         <Run Text="Пробег: "></Run>
                                                                         <Run Text="{Binding Path= Mileage_num}"></Run>
+                                                                        <Run Text=" км"></Run>
+
                                                                     </TextBlock>
                                                                 </StackPanel>
 
-                                                                <StackPanel Grid.Row="1" HorizontalAlignment="Left"
+                                                                <StackPanel Grid.Row="1" HorizontalAlignment="Left" Margin="10,10,0,10"
                                                                             VerticalAlignment="Top"
                                                                             Grid.ColumnSpan="3">
                                                                     <TextBlock HorizontalAlignment="Left" FontSize="18"
                                                                                FontWeight="Bold" Text="Аккумулятор" />
                                                                 </StackPanel>
 
-                                                                <StackPanel Grid.Row="2" HorizontalAlignment="Left"
+                                                                <StackPanel Grid.Row="2" HorizontalAlignment="Left" Margin="10,0,0,0"
                                                                             VerticalAlignment="Center"
                                                                             Grid.ColumnSpan="3">
                                                                     <TextBlock HorizontalAlignment="Left" FontSize="12"
                                                                                FontWeight="Bold" Foreground="Gray">
                                                                         <Run Text="Стоимость: "></Run>
                                                                         <Run Text="{Binding Path= TotalCost}"></Run>
+                                                                        <Run Text=" ₴"></Run>
+
                                                                     </TextBlock>
                                                                 </StackPanel>
 
-                                                                <Grid Grid.Row="1" Grid.Column="3"
+                                                                <Grid  Grid.Row="1" Grid.Column="3" Margin="0,0,10,0"
+                                                                       materialDesign:HintAssist.HelperText="{Binding Path=Expenses_id}"
+
                                                                       VerticalAlignment="Center">
-                                                                    <StackPanel ToolTip="Подробная информация">
+                                                                    <StackPanel PreviewMouseLeftButtonDown="ShowInformationAboutExpense" HorizontalAlignment="Left" ToolTip="Подробная информация">
                                                                         <materialDesign:PackIcon Kind="Eye" />
                                                                     </StackPanel>
-                                                                    <StackPanel ToolTip="Удалить информацию"
+
+                                                                    <StackPanel   ToolTip="Удалить информацию"
+                                                                        PreviewMouseLeftButtonDown="deleteItemFromList_click"
                                                                         HorizontalAlignment="Right">
                                                                         <materialDesign:PackIcon Kind="Delete"
                                                                             Foreground="DarkRed" />
                                                                     </StackPanel>
-                                                                    <StackPanel ToolTip="Редактировать информацию"
+                                                                    <StackPanel  ToolTip="Редактировать информацию"
                                                                         HorizontalAlignment="Center">
                                                                         <materialDesign:PackIcon Kind="Pencil" />
                                                                     </StackPanel>
@@ -1487,8 +1512,21 @@ x:Name="listOfExpenses"
                                             </materialDesign:Card>
 
                                         </Grid>-->
+                                        <materialDesign:Snackbar
+                                            Grid.ColumnSpan="8"
+                                            Grid.Column="1"
+                                            Grid.Row="10"
+                                            Grid.RowSpan="2"
+                                            MessageQueue="{materialDesign:MessageQueue}"
+                                            x:Name="SnackBarExpense"
+                                            IsActive="False"
+                                            Margin="0,0,0,20" VerticalAlignment="Center">
+
+                                        </materialDesign:Snackbar>
                                     </Grid>
+
                                 </materialDesign:Card>
+
 
                             </TabItem>
 
@@ -1533,6 +1571,352 @@ x:Name="listOfExpenses"
 
                         </TabControl>
 
+                        <materialDesign:Card
+                            Visibility="Visible"
+
+                            x:Name="cardAboutAllReport"
+                            Grid.Column="9"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="3"
+                            Grid.RowSpan="11"
+                            UniformCornerRadius="15"
+                            Margin="20,15,0,0"
+                            Padding="0,15"
+                            >
+                            <Grid 
+                             VerticalAlignment="Top" Height="560"
+                            >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.ColumnSpan="2" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F" Text="Отчёт" HorizontalAlignment="Center" VerticalAlignment="Top"></TextBlock>
+                                <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"   ></Line>
+
+
+                                <materialDesign:PackIcon Kind="FilePdfBox"  Grid.Row="8"
+                                                         Foreground="#FF303F9F"
+                                                         Margin="15,0"
+                                                         VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                                         ToolTip="Нажмите для формирования отчёта" Height="37" Width="41"
+                                                         />
+
+
+                                <Grid  Background="#e8e8e8" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2"
+                                      
+                                      Margin="0,20,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition ></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Padding="7,7" Grid.ColumnSpan="2"
+                                               FontSize="10"
+                                               Foreground="#737272"
+                                               >
+                                        <Run  Text=" "></Run>
+                                        <Run x:Name="countNote_exp" Text=""></Run>
+                                        <Run x:Name="dateRadius_exp" Text="Выберите часовые диапазоны"></Run>
+
+                                    </TextBlock>
+                                    <TextBlock Padding="7,7" Grid.Row="1" Grid.ColumnSpan="2"
+                                               FontSize="10"
+                                               Foreground="#737272"
+                                               Text="Траты за период">
+                                    </TextBlock>
+                                    <Border Grid.Row="2" Grid.RowSpan="2" BorderThickness="2" BorderBrush="#FF303F9F">
+
+
+                                        <StackPanel  VerticalAlignment="Center">
+                                            <TextBlock Text="Итого" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                            <TextBlock x:Name="totalExpesns_exp" FontWeight="Bold" Foreground="#FF303F9F" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" BorderThickness="2" BorderBrush="#FF303F9F">
+
+                                        <StackPanel  VerticalAlignment="Center" ToolTip="Средняя стоимость траты">
+                                            <TextBlock Text="Среднее" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                            <TextBlock x:Name="dayExpesns_exp" FontWeight="Bold" Foreground="#FF303F9F" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <Grid  Background="#e8e8e8" Grid.Row="3" Grid.RowSpan="2" Grid.ColumnSpan="2"
+                                      
+                                      Margin="0,20,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition ></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+
+                                    <TextBlock Padding="7,7"  Grid.ColumnSpan="2"
+                                               FontSize="10"
+                                               Foreground="#737272"
+                                               Text="Пробег за период"
+                                               
+                                               >
+                                    </TextBlock>
+                                    <Border Margin="0,10,0,0" Grid.Row="1" Grid.RowSpan="2" BorderThickness="2" BorderBrush="#FF303F9F">
+
+
+                                        <StackPanel  VerticalAlignment="Center">
+                                            <TextBlock Text="Итого" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                            <TextBlock x:Name="totalMileage_exp" FontWeight="Bold" Foreground="#FF303F9F" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Margin="0,10,0,0" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" BorderThickness="2" BorderBrush="#FF303F9F">
+
+                                        <StackPanel  VerticalAlignment="Center" ToolTip="Среднее за поздку значение">
+                                            <TextBlock Text="Среднее" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                            <TextBlock x:Name="dayMilage_exp" FontWeight="Bold" Foreground="#FF303F9F" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+
+                        </materialDesign:Card>
+                        <materialDesign:Card
+                            x:Name="cardInfoAboutItemExpense"
+                            Visibility="Hidden"
+                            Grid.Column="9"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="3"
+                            Grid.RowSpan="11"
+                            UniformCornerRadius="15"
+                            Margin="20,15,0,0"
+                            Padding="0,15"
+                            >
+                            <Grid 
+                             VerticalAlignment="Top" Height="560"
+                            >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.ColumnSpan="2" FontSize="13" FontWeight="Bold" Foreground="#FF303F9F" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Run Text="Информация про"></Run><LineBreak/>
+                                    <Run Text="           трату"></Run>
+                                </TextBlock>
+                                <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="2" Y1="7" Y2="7" X1="0"  X2="950"   ></Line>
+
+
+                                <materialDesign:PackIcon Kind="FilePdfBox" Grid.Row="8"
+                                                         Foreground="#FF303F9F"
+                                                         Margin="15,0"
+                                                         VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                                         ToolTip="Нажмите для формирования отчёта" Height="37" Width="41"
+                                                         />
+
+
+                                <Grid  Background="#e8e8e8" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2"
+                                      
+                                      Margin="0,20,0,0">
+                                    
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition ></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                
+                                    
+                                <TextBlock Margin="15,0,0,0" Text="Общая стоимость" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock Margin="15,0,0,0" Grid.Row="1"  VerticalAlignment="Center">
+                                        <Run x:Name="totalCost_expense" FontSize="20" FontWeight="Bold" Text="280" Foreground="#FF303F9F"></Run>
+                                        <Run Foreground="#FF303F9F" Text="₴"></Run>
+                                    </TextBlock>
+                                    <TextBlock Margin="15,0,0,0" Grid.Row="2"  VerticalAlignment="Center">
+                                        <Run Text="Пробег: "></Run>
+                                        <Run x:Name="Mileage_expense" FontWeight="Bold" Foreground="#FF303F9F" Text="23940"></Run>
+                                        <Run Foreground="#FF303F9F" Text="Км"></Run>
+                                    </TextBlock>
+                                    <TextBlock Margin="15,0,0,0" Grid.Row="3"  VerticalAlignment="Center">
+                                        <Run Text="Дата:  "></Run>
+                                        <Run x:Name="Date_expense" FontWeight="Bold" Foreground="#FF303F9F" Text="20.10.2021"></Run>
+                                    </TextBlock>
+
+                                </Grid>
+                                
+                                <Grid ToolTip="Местоположение" Grid.ColumnSpan="2" Grid.Row="3"  VerticalAlignment="Center">
+                                    <materialDesign:PackIcon   
+                                        Margin="15,0,0,0"
+                                        Kind="MapMarker" 
+                                                               Height="35" 
+                                                               Width="35" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               />
+                                    <TextBlock Margin="0,0,15,0" FontWeight="Bold" Foreground="#FF303F9F" x:Name="location_expense" Text="-" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                </Grid>
+                                <Grid   
+                                    Visibility="Hidden"
+                                    x:Name="gasGrid"
+                                    Background="#e8e8e8" Grid.Row="4" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition ></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+
+
+                                    <TextBlock Padding="7,7"  Grid.ColumnSpan="1"
+                                               FontSize="10"
+                                               Foreground="#737272">
+                                        <Run Text="Тип топлива: "></Run>
+                                        <Run  Foreground="#FF303F9F"  x:Name="typeOfFuel_expense" Text="Бензин"></Run>
+                                    </TextBlock>
+                                    <TextBlock Padding="7,7" Grid.Column="2" Grid.ColumnSpan="1"
+                                               FontSize="10"
+                                               Foreground="#737272">
+                                        <Run Text="Полный бак "></Run>
+                                        <Run  Foreground="#FF303F9F"  x:Name="isFulTank_expense" Text="Бензин"></Run>
+                                    </TextBlock>
+                                    <Border Grid.Row="1" Grid.RowSpan="2" BorderThickness="2" BorderBrush="#FF303F9F">
+
+
+                                        <StackPanel  VerticalAlignment="Center">
+                                            <TextBlock Text="Цена 1л" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                            <TextBlock x:Name="oneLitr_expense" FontWeight="Bold" Foreground="#FF303F9F" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <Run>0</Run>
+                                                <Run>₴</Run>
+
+                                            </TextBlock>
+
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" BorderThickness="2" BorderBrush="#FF303F9F">
+
+                                        <StackPanel  VerticalAlignment="Center" ToolTip="Среднее за поздку значение">
+                                            <TextBlock Text="К-во лиров" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+                                            <TextBlock x:Name="countLiters_expense" FontWeight="Bold" Foreground="#FF303F9F" Text="0" VerticalAlignment="Center" HorizontalAlignment="Center">                                                <Run>0</Run>
+                                                <Run>₴</Run>
+
+                                            </TextBlock>
+
+                                        </StackPanel>
+                                    </Border>
+
+                                </Grid>
+
+                                <Grid x:Name="ServiceGrid"  Grid.Row="4" Grid.RowSpan="6" Grid.ColumnSpan="2">
+                                        <StackPanel>
+                                            <Expander
+                                                Header="Услуги"
+                                                HorizontalAlignment="Stretch"
+                                                >
+                                                <StackPanel
+                                                    Orientation="Vertical"
+                                                    TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                                    Margin="24,8,24,16">
+                                                    <TextBlock>
+                                                        <ListBox
+                                                            x:Name="listOfFavors"
+                                                            VerticalAlignment="Top">
+                                                            <ListBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Grid Width="200">
+                                                                        <TextBlock Text="{Binding Path= Favor_name}" HorizontalAlignment="Left">
+                                                                            <TextBlock.ToolTip>
+                                                                                <ToolTip
+                                                                                    Content="{Binding Path= FavorCost_num}"
+                                                                                    ContentStringFormat="{}Стоимость услуги: {0}"
+                                                                                />
+                                                                            </TextBlock.ToolTip>
+                                                                        </TextBlock>
+                                                                        <TextBlock HorizontalAlignment="Center">
+                                                                            
+                                                                            <Run Text="{Binding Path= Favor_num}" ></Run>
+                                                                            <Run Text=" шт."></Run>
+                                                                            <TextBlock.ToolTip>
+                                                                                <ToolTip
+                                                                                    Content="{Binding Path= FavorCost_num}"
+                                                                                    ContentStringFormat="{}Стоимость услуги: {0}"
+                                                                                />
+                                                                            </TextBlock.ToolTip>
+                                                                        </TextBlock>
+                                                                    </Grid>
+                                                                </DataTemplate>
+                                                            </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                    </TextBlock>
+                                                    
+                                                </StackPanel>
+                                            </Expander>
+                                        
+                                            </StackPanel>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.ColumnSpan="2"
+                                      Grid.RowSpan="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+
+                                    </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon   Kind="CommentText" 
+                                                               Height="30" 
+                                                               Width="30" 
+                                                               Foreground="#FF303F9F" 
+                                                               VerticalAlignment="Center" 
+                                                               Margin="15,0,15,0" />
+                                    <TextBlock Text="Коментарий" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                    <TextBlock Margin="15,0,15,0" Grid.Row="1" Text="" x:Name="comment_expense"></TextBlock>
+                                </Grid>
+                            </Grid>
+
+                        </materialDesign:Card>
                         <!--<materialDesign:Card
                             materialDesign:ShadowAssist.ShadowDepth="Depth3"
                             Grid.Row="2"
@@ -1552,14 +1936,14 @@ x:Name="listOfExpenses"
                         >
 
                         </materialDesign:Card>-->
-                            </Grid>
+                    </Grid>
 
 
                 </materialDesign:Card>
 
             </TabItem>
 
-            <TabItem Width="300" >
+            <TabItem Width="300">
                 <TabItem.Header>
                     <StackPanel
                         Height="55"
@@ -1732,7 +2116,7 @@ Click="AddNewRemider_click"
                                 <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"   ></Line>
 
 
-                               
+
 
                                 <ListBox Margin="0,10,-0.8,0.4"
                                 
@@ -1742,21 +2126,21 @@ Click="AddNewRemider_click"
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Grid VerticalAlignment="Center">
-                                            <Border
+                                                <Border
                                                 Margin="0,0,25,0"
                                                 BorderThickness="2"
                                                 CornerRadius="6"
                                                 BorderBrush="Blue"
                                                 Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top">
-                                                <materialDesign:Card
+                                                    <materialDesign:Card
                                                     Padding="15,0"
                                                     materialDesign:ShadowAssist.ShadowDepth="Depth3"
                                                     materialDesign:ShadowAssist.ShadowEdges="Bottom,Right">
-                                                    <Grid>
-                                                        <materialDesign:PackIcon Foreground="#FF303F9F"
+                                                        <Grid>
+                                                            <materialDesign:PackIcon Foreground="#FF303F9F"
                                                             Kind="CheckCircleOutline" Height="29" Width="29"
                                                             VerticalAlignment="Center" />
-                                                        <Expander
+                                                            <Expander
                                                             MinWidth="315"
                                                             Margin="34,0,0,0"
                                                             HorizontalAlignment="Stretch"
@@ -1764,23 +2148,23 @@ Click="AddNewRemider_click"
                                                             Header="{Binding Path= Reminder_title}"
 
                                                             >
-                                                            <StackPanel
+                                                                <StackPanel
                                                                 materialDesign:HintAssist.HelperText="qweqwe"
 
                                                                 Orientation="Vertical"
                                                                 TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                                                 Margin="24,8,24,16">
-                                                                <TextBlock
+                                                                    <TextBlock
                                                                     Text="{Binding Path= Comment}" 
                                                                     />
-                                                               
-                                                            </StackPanel>
-                                                        </Expander>
-                                                        
-                                                    </Grid>
-                                                </materialDesign:Card>
+
+                                                                </StackPanel>
+                                                            </Expander>
+
+                                                        </Grid>
+                                                    </materialDesign:Card>
                                                 </Border>
-                                                    <materialDesign:PackIcon 
+                                                <materialDesign:PackIcon 
                                                         Foreground="DarkRed"
                                                         materialDesign:HintAssist.HelperText="{Binding Path= Reminder_id}"
 
@@ -1867,178 +2251,178 @@ Click="AddNewRemider_click"
                         <TextBlock  Text="Часто возникающие вопросы" FontSize="24"  Grid.ColumnSpan="12"  HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" Foreground="#FF777777"></TextBlock>
                         <Line Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"  Grid.ColumnSpan="12" Margin="0,0,10,0.2"></Line>
 
-                <materialDesign:Card
+                        <materialDesign:Card
                     Grid.ColumnSpan="12"
                     Grid.Row="2"
                     Grid.RowSpan="10"
                 >
-                    <Grid>
-                        <materialDesign:Card>
-                            <ScrollViewer>
+                            <Grid>
+                                <materialDesign:Card>
+                                    <ScrollViewer>
 
-<StackPanel>
+                                        <StackPanel>
 
-                                <Expander
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Как добавить автомобиль?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                                <TextBlock>
+                                                    <TextBlock>
                                                     <Run Text="1. В левом меню выберите «Профиль»"/><LineBreak/>
                                                     <Run Text="2. В правом нижнем углу нажмите на кнопку"/><LineBreak/>
                                                     <Run Text="3. Заполните все поля и нажмите кнопку «Добавить авто»"/><LineBreak/>
-                                                </TextBlock>
-                                           
-                                        
-                                    </StackPanel>
-                                </Expander>
+                                                    </TextBlock>
 
-                                <Expander
+
+                                                </StackPanel>
+                                            </Expander>
+
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Как добавить изображение автомобилю?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Профиль»"/><LineBreak/>
                                             <Run Text="2. Нажмите на иконку изображения, в правой части окна"/><LineBreak/>
                                             <Run Text="3. Выберите нужное изображение на компьютере»"/><LineBreak/>
-                                        </TextBlock>
+                                                    </TextBlock>
 
 
-                                    </StackPanel>
-                                </Expander>
-                                <Expander
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Как изменить изображение автомобилю?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Профиль»"/><LineBreak/>
                                             <Run Text="2. Нажмите на текущее изображение авто"/><LineBreak/>
                                             <Run Text="3. Выберите нужное изображение на компьютере»"/><LineBreak/>
-                                        </TextBlock>
+                                                    </TextBlock>
 
 
-                                    </StackPanel>
-                                </Expander>
-                                <Expander
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Как переключаться между автомобилями?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Профиль»"/><LineBreak/>
                                             <Run Text="2. В верхней части экрана в выпадающем списке выберите нужный автомобиль"/><LineBreak/>
                                             <Run Text="3. При условии, вы добавили несколько изображений - приложение примет изменение"/><LineBreak/>
-                                        </TextBlock>
+                                                    </TextBlock>
 
 
-                                    </StackPanel>
-                                </Expander>
-                                <Expander
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Как добавить запись траты в приложение?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Заправка» или «Сервис», в зависимости от типа траты"/><LineBreak/>
                                             <Run Text="2. Заполните все обязательные поля в открытом окне"/><LineBreak/>
                                             <Run Text="3. Нажмите кнопку «Добавить запись»"/><LineBreak/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Expander>
-                                <Expander
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Как добавить запись об прибыли в приложение?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Доход»"/><LineBreak/>
                                             <Run Text="2. Заполните все обязательные поля в открытом окне"/><LineBreak/>
                                             <Run Text="3. Не забудьте выбрать вид дохода в блоке справа"/><LineBreak/>
                                             <Run Text="4. Нажмите кнопку «Добавить запись»"/><LineBreak/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Expander>
-                                <Expander
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Что делать если нет нужного вида сервиса?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Сервис»"/><LineBreak/>
                                             <Run Text="2. В блоке справа нажмите на кнопку «Новый вид»"/><LineBreak/>
                                             <Run Text="3. В открытом окне заполните единственное поле"/><LineBreak/>
                                             <Run Text="4. Нажмите кнопку «Добавить»"/><LineBreak/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Expander>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Expander>
 
-                                <Expander
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Что делать если нет нужного вида дохода?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Доход»"/><LineBreak/>
                                             <Run Text="2. В блоке справа нажмите на кнопку «Новый вид»"/><LineBreak/>
                                             <Run Text="3. В открытом окне заполните единственное поле"/><LineBreak/>
                                             <Run Text="4. Нажмите кнопку «Добавить»"/><LineBreak/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Expander>
-                                <Expander
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Как добавить напоминание?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Напоминания»"/><LineBreak/>
                                             <Run Text="2. Заполните обязательные поля"/><LineBreak/>
                                             <Run Text="3. Нажмите на кнопку «Добавить запись»"/><LineBreak/>
                                             <Run Text="4. Запись появится в блоке «Ваши напоминания»"/><LineBreak/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Expander>
-                                <Expander
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander
                                     HorizontalAlignment="Stretch"
                                     Header="Как удалить напоминание?">
-                                    <StackPanel
+                                                <StackPanel
                                         Orientation="Vertical"
                                         TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
                                         Margin="24,8,24,16">
-                                        <TextBlock>
+                                                    <TextBlock>
                                             <Run Text="1. В левом меню выберите «Напоминания»"/><LineBreak/>
                                             <Run Text="2. В блоке «Ваши напоминания» найдите нужное"/><LineBreak/>
                                             <Run Text="3. Нажмите на иконку, символизирующую удаление»"/><LineBreak/>
                                             <Run Text="4. подтвердите свои действия»"/><LineBreak/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </Expander>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Expander>
 
-                                    </StackPanel>
-</ScrollViewer>
-                        </materialDesign:Card>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </materialDesign:Card>
                             </Grid>
-                </materialDesign:Card>
+                        </materialDesign:Card>
 
 
                     </Grid>

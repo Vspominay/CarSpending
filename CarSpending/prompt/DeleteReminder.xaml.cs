@@ -22,11 +22,13 @@ namespace CarSpending.prompt
     {
         private DataClass dataClass;
         private int reminderId;
-        public DeleteReminder(int reminderId)
+        private User user;
+        public DeleteReminder(int reminderId,User user)
         {
             InitializeComponent();
             this.reminderId = reminderId;
             dataClass = new DataClass();
+            this.user = user;
         }
 
         private void CancelDelete_click(object sender, RoutedEventArgs e)
@@ -37,6 +39,8 @@ namespace CarSpending.prompt
         private void DeleteSeltReminder(object sender, RoutedEventArgs e)
         {
             dataClass.selectQuery("delete from Reminders where Reminder_id = " + reminderId);
+            MainWindow mainWindow = new MainWindow(user);
+            mainWindow.Show();
             Close();
         }
     }

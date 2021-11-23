@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +18,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CarSpending.prompt;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -34,7 +38,7 @@ namespace CarSpending
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        private int clickCount = 0;
         private ApplicationContext db;
         public ObservableCollection<FuelType> FuelTypes { get; set; }
 
@@ -43,7 +47,7 @@ namespace CarSpending
         public ObservableCollection<Reminder> RemindersList { get; set; }
         public ObservableCollection<Expense> ExpensesList { get; set; }
 
-
+        private DataClass dataClass;
 
 
 
@@ -62,6 +66,30 @@ namespace CarSpending
             InitializeComponent();
         }
 
+        private string typeIcon;
+
+        public string TypeIcon
+        {
+            get
+            {
+                return typeIcon;
+            }
+            set
+            {
+                if (typeIcon != value)
+                {
+                    typeIcon = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(propertyName));
+        }
         public MainWindow(User user)
         {
             InitializeComponent();
@@ -83,8 +111,99 @@ namespace CarSpending
             pushIntoListbox(RemindersList, reminders_list, db.Reminders); //push reminders into listbox
 
 
+            // ExpensesList = new ObservableCollection<Expense>();
+            /*
+           foreach (var expenseItem in result)
+           {
+               if (expenseItem.Service_id == null)
+               {
+                   ExpensesList.Add(new Expense(expenseItem.Car_id,expenseItem.Expense_date,expenseItem.Mileage_num,expenseItem.TotalCost,
+                       -1,expenseItem.Refill_id,expenseItem.Comment,expenseItem.Location));
+               }
+               else
+               {
+                   ExpensesList.Add(new Expense(expenseItem.Car_id, expenseItem.Expense_date, expenseItem.Mileage_num, expenseItem.TotalCost,
+                       expenseItem.Service_id, -1, expenseItem.Comment, expenseItem.Location));
+               }
+           }
+           listOfExpenses.ItemsSource = ExpensesList;*/
+
+            //LoadDataIntoExpensesList();
+
         }
 
+        public void LoadDataIntoExpensesList()
+        {
+            DataTable dTable = new DataTable();
+            List<Expense> testList = new List<Expense>();
+            try
+            {
+                string sqlQuery = "SELECT * from Expenses";
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlQuery, "Data Source=.\\spendingCar.db");
+                adapter.Fill(dTable);
+
+
+                if (dTable.Rows.Count > 0)
+                {
+                    TypeIcon = "Wrench";
+                    int carId, serviceId, refillId, Expenses_id;
+                    string expanseDate, comment, location;
+                    double mileage, totalCost;
+                    for (int i = 0; i < dTable.Rows.Count; i++)
+                    {
+                        Expenses_id = Convert.ToInt32(dTable.Rows[i].ItemArray[0]);
+                        carId = Convert.ToInt32(dTable.Rows[i].ItemArray[1]);
+                        expanseDate = dTable.Rows[i].ItemArray[2].ToString();
+                        mileage = Convert.ToDouble(dTable.Rows[i].ItemArray[3]);
+                        totalCost = Convert.ToDouble(dTable.Rows[i].ItemArray[4]);
+                        try
+                        {
+                            serviceId = Convert.ToInt32(dTable.Rows[i].ItemArray[6]);
+                        }
+                        catch (Exception e)
+                        {
+                            serviceId = -1;
+                        }
+
+                        try
+                        {
+                            refillId = Convert.ToInt32(dTable.Rows[i].ItemArray[7]);
+                        }
+                        catch (Exception e)
+                        {
+                            refillId = -1;
+                        }
+
+                        comment = dTable.Rows[i].ItemArray[5].ToString();
+                        location = dTable.Rows[i].ItemArray[8].ToString();
+
+                        var exp = new Expense
+                        {
+                            Car_id = carId,
+                            Expense_date = expanseDate,
+                            Mileage_num = mileage,
+                            TotalCost = totalCost,
+                            Service_id = serviceId,
+                            Refill_id = refillId,
+                            Comment = comment,
+                            Location = location,
+                            Expenses_id = Expenses_id
+                        };
+
+                        testList.Add(exp);
+                    }
+                }
+                else
+                    MessageBox.Show("Database is empty");
+            }
+            catch (SQLiteException ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
+            listOfExpenses.ItemsSource = new ObservableCollection<Expense>(testList);
+
+
+        }
         public void pushIntoListbox<T>(ObservableCollection<T> observableCollection, ListBox listBox,DbSet dbSet)
         {
             observableCollection = new ObservableCollection<T>();
@@ -809,13 +928,145 @@ namespace CarSpending
             var cb = sender as PackIcon;
             var item = cb.DataContext;
             reminders_list.SelectedItem = item;
-            DeleteReminder deleteReminder = new DeleteReminder(((Reminder)reminders_list.SelectedItem).Reminder_id);
+            DeleteReminder deleteReminder = new DeleteReminder(((Reminder)reminders_list.SelectedItem).Reminder_id,user);
             deleteReminder.Owner = this;
             deleteReminder.ShowDialog();
 
-            MainWindow mainWindow = new MainWindow(user);
-            mainWindow.Show();
-            Close();
+           
+        }
+
+
+        private void deleteItemFromList_click(object sender, MouseButtonEventArgs e)
+        {
+            dataClass = new DataClass();
+            var cb = sender as StackPanel;
+            var item = cb.DataContext;
+            listOfExpenses.SelectedItem = item;
+            Expense selectExpense = (Expense)(listOfExpenses.SelectedItem);
+            int tempCountList = listOfExpenses.Items.Count;
+            DeleteExpense delete = new DeleteExpense(dataClass, selectExpense);
+            delete.Owner = this;
+            delete.ShowDialog();
+            LoadDataIntoExpensesList();
+            if (tempCountList != listOfExpenses.Items.Count)
+            {
+                SnackBarExpense.MessageQueue?.Enqueue("Запись удалена!", null, null, null, false, true,
+                    TimeSpan.FromSeconds(3));
+            }
+            // MainWindow mainWindow = new MainWindow(user);
+            // mainWindow.Show();
+            // Close();
+        }
+
+        private void TabItem_PreviewMouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
+        {
+            LoadDataIntoExpensesList();
+        }
+
+
+
+        private void selectRadiusDateOpen_click(object sender, MouseButtonEventArgs e)
+        {
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfExpenses, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp);
+            selectDate.Owner = this;
+            selectDate.ShowDialog();
+            cardAboutAllReport.Visibility = Visibility.Visible;
+            cardInfoAboutItemExpense.Visibility = Visibility.Hidden;
+        }
+
+        private void SearchNotesinExpenses(object sender, MouseButtonEventArgs e)//search notes in expenses used date and mileage
+        {
+            SearchData search = new SearchData(listOfExpenses);
+            search.Owner = this;
+            search.ShowDialog();
+
+        }
+
+        private void sorttedExpenses_click(object sender, MouseButtonEventArgs e)
+        {
+            SortWindow sortWindow = new SortWindow(listOfExpenses);
+            sortWindow.Owner = this;
+            sortWindow.ShowDialog();
+        }
+
+        public void PushGeneralData(List<Expense> filtersDateList)
+        {
+            totalCost_expense.Text = filtersDateList[0].TotalCost + "";
+            Mileage_expense.Text = filtersDateList[0].Mileage_num + "";
+            Date_expense.Text = filtersDateList[0].Expense_date + "";
+            location_expense.Text = filtersDateList[0].Location + "";
+            comment_expense.Text = filtersDateList[0].Comment + "";
+            cardAboutAllReport.Visibility = Visibility.Hidden;
+            cardInfoAboutItemExpense.Visibility = Visibility.Visible;
+        }
+
+        public void PushRefilsData(List<Expense> filtersDateList)
+        {
+            gasGrid.Visibility = Visibility.Visible;
+            ServiceGrid.Visibility = Visibility.Hidden;
+            int idRefil = filtersDateList[0].Refill_id;
+            Refill refilItem = db.Refills.FirstOrDefault(rItem => rItem.Refill_id == idRefil);
+            string typeOfFuel = db.FuelTypes.FirstOrDefault(typeFuel => typeFuel.Fuel_id == refilItem.Fuel_id)?.Fuel_title;
+            typeOfFuel_expense.Text = typeOfFuel;
+            isFulTank_expense.Text = refilItem.FullTank_status == 1 ? "Да" : "Нет";
+            oneLitr_expense.Text = refilItem.LiterCost_num + "";
+            countLiters_expense.Text = refilItem.AmountLiter_num + "";
+        }
+        public void PushServiceData(List<Expense> filtersDateList)
+        {
+            gasGrid.Visibility = Visibility.Hidden;
+            ServiceGrid.Visibility = Visibility.Visible;
+            int serviceId = filtersDateList[0].Service_id;
+            var rowCollectionService = dataClass.selectQuery("select * from Services where Service_id = " + serviceId).Rows;
+            List<Service> serviceListFromId = dataClass.SelecServices(rowCollectionService);//favornum
+
+            List<Favor> favorListFromServiceId = new List<Favor>();//favor_cost
+            foreach (Favor favorItem in db.Favors)
+            {
+                if (serviceListFromId.Any(s => s.Favor_id == favorItem.Favor_id))
+                {
+                    favorListFromServiceId.Add(favorItem);
+                }
+            }
+
+            List<favorType> favorTypeFromFavorId = new List<favorType>(); //favorName
+            foreach (favorType favorType in db.FavorTypes)
+            {
+                if (favorListFromServiceId.Any(s => s.FavorType_id == favorType.FavorType_id))
+                {
+                    favorTypeFromFavorId.Add(favorType);
+                }
+            }
+
+            TypeOfserviceItems = new ObservableCollection<TypeOfserviceItem>();
+            for (int i = 0; i < favorTypeFromFavorId.Count; i++)
+            {
+                TypeOfserviceItems.Add(new TypeOfserviceItem(favorTypeFromFavorId[i].Favor_name,
+                    favorListFromServiceId[i].FavorCost_num, serviceListFromId[i].Favor_num));
+            }
+
+            listOfFavors.ItemsSource = TypeOfserviceItems;
+        }
+        private void ShowInformationAboutExpense(object sender, MouseButtonEventArgs e)
+        {
+            db = new ApplicationContext();
+            var cb = sender as StackPanel;
+            var item = cb.DataContext;
+            listOfExpenses.SelectedItem = item;
+            dataClass = new DataClass();
+            int idExpense = ((Expense)listOfExpenses.SelectedItem).Expenses_id;
+            var itemCost = dataClass.selectQuery("select * from Expenses where Expenses_id = " + idExpense).Rows;
+            var filtersDateList = dataClass.SelecExpenses(itemCost);
+            PushGeneralData(filtersDateList);
+
+            if (filtersDateList[0].Service_id == -1)
+            {
+                PushRefilsData(filtersDateList);
+            }
+            else
+            {
+                PushServiceData(filtersDateList);
+            }
         }
     }
 }

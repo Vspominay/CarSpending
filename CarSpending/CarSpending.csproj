@@ -208,13 +208,13 @@
     </Compile>
     <Compile Include="Car.cs" />
     <Compile Include="DataClass.cs" />
-    <Compile Include="Delay.cs" />
     <Compile Include="Expense.cs" />
     <Compile Include="favor.cs" />
     <Compile Include="favorType.cs" />
     <Compile Include="FuelType.cs" />
     <Compile Include="Image.cs" />
     <Compile Include="ListboxItems\TypeOfserviceItems.cs" />
+    <Compile Include="MyConverter.cs" />
     <Compile Include="Profit.cs" />
     <Compile Include="ProfitType.cs" />
     <Compile Include="prompt\AddProfitType.xaml.cs">
@@ -223,11 +223,23 @@
     <Compile Include="prompt\AddServiceType.xaml.cs">
       <DependentUpon>AddServiceType.xaml</DependentUpon>
     </Compile>
+    <Compile Include="prompt\DeleteExpense.xaml.cs">
+      <DependentUpon>DeleteExpense.xaml</DependentUpon>
+    </Compile>
     <Compile Include="prompt\DeleteReminder.xaml.cs">
       <DependentUpon>DeleteReminder.xaml</DependentUpon>
     </Compile>
     <Compile Include="prompt\promptNotFoundUser.xaml.cs">
       <DependentUpon>promptNotFoundUser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="prompt\SearchData.xaml.cs">
+      <DependentUpon>SearchData.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="prompt\SelectDateRadius.xaml.cs">
+      <DependentUpon>SelectDateRadius.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="prompt\SortWindow.xaml.cs">
+      <DependentUpon>SortWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Refill.cs" />
     <Compile Include="Reminder.cs" />
@@ -261,6 +273,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="prompt\DeleteExpense.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="prompt\DeleteReminder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -270,6 +286,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="prompt\promptBeforeExit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="prompt\SearchData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="prompt\SelectDateRadius.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="prompt\SortWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
