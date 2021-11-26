@@ -24,10 +24,10 @@ namespace CarSpending.prompt
     {
         private MainWindow mainWindow;
         private Run dateRadius_exp, countNote_exp;
-        private ListBox listOfExpenses;
+        private ListBox listOfExpenses, listOfRefills, listOfService;
         private TextBlock totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp;
 
-        public SelectDateRadius(Run dateRadius_exp,ListBox listOfExpenses,Run countNote_exp, TextBlock totalExpesns_exp, TextBlock dayExpesns_exp, TextBlock totalMileage_exp, TextBlock dayMilage_exp)
+        public SelectDateRadius(Run dateRadius_exp,ListBox listOfExpenses,Run countNote_exp, TextBlock totalExpesns_exp, TextBlock dayExpesns_exp, TextBlock totalMileage_exp, TextBlock dayMilage_exp,ListBox listOfRefills, ListBox listOfService)
         {
             this.totalExpesns_exp = totalExpesns_exp;
             this.dayExpesns_exp = dayExpesns_exp;
@@ -36,6 +36,8 @@ namespace CarSpending.prompt
             this.dateRadius_exp = dateRadius_exp;
             this.listOfExpenses = listOfExpenses;
             this.countNote_exp = countNote_exp;
+            this.listOfRefills = listOfRefills;
+            this.listOfService = listOfService;
             InitializeComponent();
         }
 
@@ -61,15 +63,47 @@ namespace CarSpending.prompt
                                              "' AND '" + expenseDateFinish + "'").Rows;
 
             var filtersDateList = dataClass.SelecExpenses(test);
-            listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
+
+            mainWindow.FilterExpense(ref listOfExpenses, new ObservableCollection<Expense>(), new List<Expense>(), filtersDateList,listOfRefills,listOfService);
+
+            // listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
 
 
             dateRadius_exp.Text = "(" + expenseDateStart.Replace("-", "/") + " - " +
                                   expenseDateFinish.Replace("-", "/") + ")";// show date raius
 
 
-            countNote_exp.Text = test.Count+"";// show count notes 
-            var calcutaeStatistick = countTotalCost(filtersDateList);
+            List<Expense> tempList = new List<Expense>();
+
+            if (listOfExpenses == listOfRefills)
+            {
+                foreach (var testItem in filtersDateList)
+                {
+                    if (testItem.Service_id == -1)
+                    {
+                        tempList.Add(testItem);
+                    }
+                }
+
+            }
+            else if (listOfExpenses == listOfService)
+            {
+                foreach (var testItem in filtersDateList)
+                {
+                    if (testItem.Refill_id == -1)
+                    {
+                        tempList.Add(testItem);
+                    }
+                }
+
+            }
+            else
+            {
+                tempList = filtersDateList;
+            }
+
+            countNote_exp.Text = tempList.Count+"";// show count notes 
+            var calcutaeStatistick = countTotalCost(tempList);
             totalExpesns_exp.Text = calcutaeStatistick["totalCost"] + " км";
             dayExpesns_exp.Text = calcutaeStatistick["averageCost"] + " км";
             totalMileage_exp.Text = calcutaeStatistick["resultMileage"] + " ₴";

@@ -132,12 +132,16 @@ namespace CarSpending
 
         }
 
-        public void LoadDataIntoExpensesList()
+        public void LoadDataIntoExpensesList(ListBox listOfExpenses)
         {
             DataTable dTable = new DataTable();
             List<Expense> testList = new List<Expense>();
+            List<Expense> refiltList = new List<Expense>();
+            List<Expense> servicetList = new List<Expense>();
+
             try
             {
+
                 string sqlQuery = "SELECT * from Expenses";
                 SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlQuery, "Data Source=.\\spendingCar.db");
                 adapter.Fill(dTable);
@@ -200,10 +204,71 @@ namespace CarSpending
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
-            listOfExpenses.ItemsSource = new ObservableCollection<Expense>(testList);
 
+
+            FilterExpense(ref listOfExpenses, new ObservableCollection<Expense>(), new List<Expense>(), testList,listOfRefills,listOfService);
+            /*if (listOfExpenses == listOfRefills)
+            {
+                foreach (var testItem in testList)
+                {
+                    if (testItem.Service_id == -1)
+                    {
+                        refiltList.Add(testItem);
+                    }
+                }
+
+                listOfRefills.ItemsSource = new ObservableCollection<Expense>(refiltList);
+            }
+            else if (listOfExpenses == listOfService)
+            {
+                foreach (var testItem in testList)
+                {
+                    if (testItem.Refill_id == -1)
+                    {
+                        servicetList.Add(testItem);
+                    }
+                }
+                listOfService.ItemsSource = new ObservableCollection<Expense>(servicetList);
+            }
+            else
+            {
+                listOfExpenses.ItemsSource = new ObservableCollection<Expense>(testList);
+
+            }*/
 
         }
+
+        public void FilterExpense(ref ListBox listbox,ObservableCollection<Expense> observable ,List<Expense> tempList,List<Expense> testList, ListBox listRef, ListBox listSer)
+        {
+            if (listbox == listRef)
+            {
+                foreach (var testItem in testList)
+                {
+                    if (testItem.Service_id == -1)
+                    {
+                        tempList.Add(testItem);
+                    }
+                }
+
+                listbox.ItemsSource = new ObservableCollection<Expense>(tempList);
+            }
+            else if (listbox == listSer)
+            {
+                foreach (var testItem in testList)
+                {
+                    if (testItem.Refill_id == -1)
+                    {
+                        tempList.Add(testItem);
+                    }
+                }
+                listbox.ItemsSource = new ObservableCollection<Expense>(tempList);
+            }
+            else
+            {
+                listbox.ItemsSource = new ObservableCollection<Expense>(testList);
+            }
+        }
+
         public void pushIntoListbox<T>(ObservableCollection<T> observableCollection, ListBox listBox,DbSet dbSet)
         {
             observableCollection = new ObservableCollection<T>();
@@ -881,17 +946,6 @@ namespace CarSpending
 
 
             ValidationDate(expenseDate_reminders,ref ExpenseDate,ref isCorect);
-            // if (DateTime.TryParse(expenseDate_reminders.Text, out dt))
-            // {
-            //     ExpenseDate = ToDateSqlite(DateTime.Parse(expenseDate_reminders.Text));
-            // }
-            // else
-            // {
-            //     isCorect = false;
-            //     expenseDate_reminders.Foreground = Brushes.DarkRed;
-            //     TextFieldAssist.SetUnderlineBrush(expenseDate_reminders, Brushes.DarkRed);
-            //     HintAssist.SetHint(expenseDate_reminders, "Некоректно заполненое поле");
-            // }
 
             if (titleReminder.Length < 3 || Regex.IsMatch(titleReminder, patternText, RegexOptions.IgnoreCase))
             {
@@ -938,41 +992,45 @@ namespace CarSpending
 
         private void deleteItemFromList_click(object sender, MouseButtonEventArgs e)
         {
+            deteItemExpenses(listOfExpenses, sender, SnackBarExpense);
+        }
+
+        public void deteItemExpenses(ListBox listOfExp, object sender,Snackbar snakbar)
+        {
             dataClass = new DataClass();
             var cb = sender as StackPanel;
             var item = cb.DataContext;
-            listOfExpenses.SelectedItem = item;
-            Expense selectExpense = (Expense)(listOfExpenses.SelectedItem);
-            int tempCountList = listOfExpenses.Items.Count;
+            listOfExp.SelectedItem = item;
+            Expense selectExpense = (Expense)(listOfExp.SelectedItem);
+            int tempCountList = listOfExp.Items.Count;
             DeleteExpense delete = new DeleteExpense(dataClass, selectExpense);
             delete.Owner = this;
             delete.ShowDialog();
-            LoadDataIntoExpensesList();
-            if (tempCountList != listOfExpenses.Items.Count)
+            LoadDataIntoExpensesList(listOfExp);
+            if (tempCountList != listOfExp.Items.Count)
             {
-                SnackBarExpense.MessageQueue?.Enqueue("Запись удалена!", null, null, null, false, true,
+                snakbar.MessageQueue?.Enqueue("Запись удалена!", null, null, null, false, true,
                     TimeSpan.FromSeconds(3));
             }
-            // MainWindow mainWindow = new MainWindow(user);
-            // mainWindow.Show();
-            // Close();
         }
 
         private void TabItem_PreviewMouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
-            LoadDataIntoExpensesList();
+            LoadDataIntoExpensesList(listOfExpenses);
         }
 
 
 
         private void selectRadiusDateOpen_click(object sender, MouseButtonEventArgs e)
         {
-            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfExpenses, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp);
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfExpenses, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp,listOfRefills,listOfService);
             selectDate.Owner = this;
             selectDate.ShowDialog();
             cardAboutAllReport.Visibility = Visibility.Visible;
             cardInfoAboutItemExpense.Visibility = Visibility.Hidden;
         }
+
+
 
         private void SearchNotesinExpenses(object sender, MouseButtonEventArgs e)//search notes in expenses used date and mileage
         {
@@ -984,7 +1042,7 @@ namespace CarSpending
 
         private void sorttedExpenses_click(object sender, MouseButtonEventArgs e)
         {
-            SortWindow sortWindow = new SortWindow(listOfExpenses);
+            SortWindow sortWindow = new SortWindow(listOfExpenses, listOfRefills, listOfService);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
         }
@@ -1049,12 +1107,17 @@ namespace CarSpending
         }
         private void ShowInformationAboutExpense(object sender, MouseButtonEventArgs e)
         {
+            ShowDetailsExpense(listOfExpenses, sender);
+        }
+
+        public void ShowDetailsExpense(ListBox listOfExpense,object sender)
+        {
             db = new ApplicationContext();
             var cb = sender as StackPanel;
             var item = cb.DataContext;
-            listOfExpenses.SelectedItem = item;
+            listOfExpense.SelectedItem = item;
             dataClass = new DataClass();
-            int idExpense = ((Expense)listOfExpenses.SelectedItem).Expenses_id;
+            int idExpense = ((Expense)listOfExpense.SelectedItem).Expenses_id;
             var itemCost = dataClass.selectQuery("select * from Expenses where Expenses_id = " + idExpense).Rows;
             var filtersDateList = dataClass.SelecExpenses(itemCost);
             PushGeneralData(filtersDateList);
@@ -1067,6 +1130,82 @@ namespace CarSpending
             {
                 PushServiceData(filtersDateList);
             }
+        }
+
+        private void refillsTabItem_click(object sender, MouseButtonEventArgs e)
+        {
+            LoadDataIntoExpensesList(listOfRefills);
+        }
+
+        private void servicelistTabItem_click(object sender, MouseButtonEventArgs e)
+        {
+            LoadDataIntoExpensesList(listOfService);
+        }
+
+        private void SearchNotesinRefills(object sender, MouseButtonEventArgs e)
+        {
+            SearchData search = new SearchData(listOfRefills);
+            search.Owner = this;
+            search.ShowDialog();
+        }
+
+        private void selectRadiusDateOpenRefil_click(object sender, MouseButtonEventArgs e)
+        {
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfRefills, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService);
+            selectDate.Owner = this;
+            selectDate.ShowDialog();
+            cardAboutAllReport.Visibility = Visibility.Visible;
+            cardInfoAboutItemExpense.Visibility = Visibility.Hidden;
+        }
+
+        private void SearchNotesinServices(object sender, MouseButtonEventArgs e)
+        {
+            SearchData search = new SearchData(listOfService);
+            search.Owner = this;
+            search.ShowDialog();
+        }
+
+        private void selectRadiusDateOpenService_click(object sender, MouseButtonEventArgs e)
+        {
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfService, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService);
+            selectDate.Owner = this;
+            selectDate.ShowDialog();
+            cardAboutAllReport.Visibility = Visibility.Visible;
+            cardInfoAboutItemExpense.Visibility = Visibility.Hidden;
+        }
+
+        private void sorttedRefils_click(object sender, MouseButtonEventArgs e)
+        {
+            SortWindow sortWindow = new SortWindow(listOfRefills, listOfRefills, listOfService);
+            sortWindow.Owner = this;
+            sortWindow.ShowDialog();
+        }
+
+        private void sorttedService_click(object sender, MouseButtonEventArgs e)
+        {
+            SortWindow sortWindow = new SortWindow(listOfService,listOfRefills,listOfService);
+            sortWindow.Owner = this;
+            sortWindow.ShowDialog();
+        }
+
+        private void ShowInformationAboutReffil(object sender, MouseButtonEventArgs e)
+        {
+            ShowDetailsExpense(listOfRefills,sender);
+        }
+
+        private void ShowInformationAboutService(object sender, MouseButtonEventArgs e)
+        {
+            ShowDetailsExpense(listOfService, sender);
+        }
+
+        private void deleteItemFromListService_click(object sender, MouseButtonEventArgs e)
+        {
+            deteItemExpenses(listOfService, sender, SnackBarService);
+        }
+
+        private void deleteItemFromListRefills_click(object sender, MouseButtonEventArgs e)
+        {
+            deteItemExpenses(listOfRefills, sender, SnackBarRefill);
         }
     }
 }

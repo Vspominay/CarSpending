@@ -21,17 +21,22 @@ namespace CarSpending.prompt
     /// </summary>
     public partial class SortWindow : Window
     {
-        private ListBox listOfExpenses;
+        private ListBox listOfExpenses, listRef,listSer;
         private DataClass dataClass;
-        public SortWindow(ListBox listOfExpenses)
+        private MainWindow mainWindow;
+        public SortWindow(ListBox listOfExpenses,ListBox listOfRefills,ListBox listOfService)
         {
             InitializeComponent();
             this.listOfExpenses = listOfExpenses;
+            listRef = listOfRefills;
+            listSer = listOfService;
+
         }
 
         private void sortedItems_click(object sender, RoutedEventArgs e)
         {
-            SortedItems(ref listOfExpenses);
+            
+            SortedItems(ref listOfExpenses, listRef, listSer);
         }
 
         private void closeWindow_click(object sender, RoutedEventArgs e)
@@ -39,7 +44,7 @@ namespace CarSpending.prompt
             Close();
         }
 
-        public void SortedItems(ref ListBox listOfExpenses)
+        public void SortedItems(ref ListBox listOfExpenses,ListBox listRef,ListBox listSer)
         {
             var sortedCost = sortedCost_rad;
             var sortedMileage = sortedMileage_rad;
@@ -48,6 +53,7 @@ namespace CarSpending.prompt
 
             DataRowCollection itemCost = null;
             dataClass = new DataClass();
+            mainWindow = new MainWindow();
 
             if (sortedCost.IsChecked == true )
             {
@@ -83,7 +89,8 @@ namespace CarSpending.prompt
                 }
             }
             var filtersDateList = dataClass.SelecExpenses(itemCost);
-            listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
+            mainWindow.FilterExpense(ref listOfExpenses,new ObservableCollection<Expense>(),new List<Expense>(), filtersDateList,listRef,listSer);
+            //listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
             Close();
         }
     }
