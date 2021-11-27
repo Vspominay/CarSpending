@@ -132,12 +132,32 @@ namespace CarSpending
 
         }
 
+        public void LoadDataIntoProfitsList(ListBox listOfProfits)
+        {
+            List<Profit> profitList = new List<Profit>();
+            if (db.Profits.ToList().Count > 0)
+            {
+                try
+                {
+                    profitList = db.Profits.ToList();
+                    listOfProfits.ItemsSource = new ObservableCollection<Profit>(profitList);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            else
+            {
+                MessageBox.Show("database is empty", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+        }
         public void LoadDataIntoExpensesList(ListBox listOfExpenses)
         {
             DataTable dTable = new DataTable();
             List<Expense> testList = new List<Expense>();
-            List<Expense> refiltList = new List<Expense>();
-            List<Expense> servicetList = new List<Expense>();
 
             try
             {
@@ -1014,16 +1034,52 @@ namespace CarSpending
             }
         }
 
+        public void PushElementsIntopTopCost()
+        {
+            var topFavorsCost = db.Favors.OrderByDescending(f => f.FavorCost_num).Take(5).ToList();
+            List<favorType> favorTypes = new List<favorType>();
+
+            
+            for (int i = 0; i < topFavorsCost.Count; i++)
+            {
+                favorTypes.Add(db.FavorTypes.ToList().FirstOrDefault(ft=> ft.FavorType_id == topFavorsCost[i].FavorType_id));
+            }
+            
+
+            TypeOfserviceItems = new ObservableCollection<TypeOfserviceItem>();
+            for (int i = 0; i < topFavorsCost.Count; i++)
+            {
+                TypeOfserviceItems.Add(new TypeOfserviceItem
+                {
+                    FavorCost_num = topFavorsCost[i].FavorCost_num,
+                    Favor_name = favorTypes[i].Favor_name,
+                });
+            }
+            topCostList.ItemsSource = TypeOfserviceItems;
+
+        }
         private void TabItem_PreviewMouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
         {
             LoadDataIntoExpensesList(listOfExpenses);
+            PushElementsIntopTopCost();
         }
 
 
 
         private void selectRadiusDateOpen_click(object sender, MouseButtonEventArgs e)
         {
-            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfExpenses, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp,listOfRefills,listOfService);
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp,
+                listOfExpenses,
+                countNote_exp,
+                totalExpesns_exp,
+                dayExpesns_exp,
+                totalMileage_exp,
+                dayMilage_exp,
+                listOfRefills,
+                listOfService,
+                null,
+                TitleExpOrProf);
+
             selectDate.Owner = this;
             selectDate.ShowDialog();
             cardAboutAllReport.Visibility = Visibility.Visible;
@@ -1034,7 +1090,7 @@ namespace CarSpending
 
         private void SearchNotesinExpenses(object sender, MouseButtonEventArgs e)//search notes in expenses used date and mileage
         {
-            SearchData search = new SearchData(listOfExpenses);
+            SearchData search = new SearchData(listOfExpenses,listOfProfits);
             search.Owner = this;
             search.ShowDialog();
 
@@ -1042,7 +1098,7 @@ namespace CarSpending
 
         private void sorttedExpenses_click(object sender, MouseButtonEventArgs e)
         {
-            SortWindow sortWindow = new SortWindow(listOfExpenses, listOfRefills, listOfService);
+            SortWindow sortWindow = new SortWindow(listOfExpenses, listOfRefills, listOfService,null);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
         }
@@ -1144,14 +1200,14 @@ namespace CarSpending
 
         private void SearchNotesinRefills(object sender, MouseButtonEventArgs e)
         {
-            SearchData search = new SearchData(listOfRefills);
+            SearchData search = new SearchData(listOfRefills, listOfProfits);
             search.Owner = this;
             search.ShowDialog();
         }
 
         private void selectRadiusDateOpenRefil_click(object sender, MouseButtonEventArgs e)
         {
-            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfRefills, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService);
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfRefills, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService,null, TitleExpOrProf);
             selectDate.Owner = this;
             selectDate.ShowDialog();
             cardAboutAllReport.Visibility = Visibility.Visible;
@@ -1160,14 +1216,14 @@ namespace CarSpending
 
         private void SearchNotesinServices(object sender, MouseButtonEventArgs e)
         {
-            SearchData search = new SearchData(listOfService);
+            SearchData search = new SearchData(listOfService, listOfProfits);
             search.Owner = this;
             search.ShowDialog();
         }
 
         private void selectRadiusDateOpenService_click(object sender, MouseButtonEventArgs e)
         {
-            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfService, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService);
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfService, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService,null, TitleExpOrProf);
             selectDate.Owner = this;
             selectDate.ShowDialog();
             cardAboutAllReport.Visibility = Visibility.Visible;
@@ -1176,14 +1232,14 @@ namespace CarSpending
 
         private void sorttedRefils_click(object sender, MouseButtonEventArgs e)
         {
-            SortWindow sortWindow = new SortWindow(listOfRefills, listOfRefills, listOfService);
+            SortWindow sortWindow = new SortWindow(listOfRefills, listOfRefills, listOfService,null);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
         }
 
         private void sorttedService_click(object sender, MouseButtonEventArgs e)
         {
-            SortWindow sortWindow = new SortWindow(listOfService,listOfRefills,listOfService);
+            SortWindow sortWindow = new SortWindow(listOfService,listOfRefills,listOfService,null);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
         }
@@ -1206,6 +1262,65 @@ namespace CarSpending
         private void deleteItemFromListRefills_click(object sender, MouseButtonEventArgs e)
         {
             deteItemExpenses(listOfRefills, sender, SnackBarRefill);
+        }
+
+        private void profitTabItem_click(object sender, MouseButtonEventArgs e)
+        {
+            LoadDataIntoProfitsList(listOfProfits);
+        }
+
+        private void deleteItemFromListProfits_click(object sender, MouseButtonEventArgs e)
+        {
+            DeleteItemProfit(listOfProfits,sender);
+        }
+
+        private void DeleteItemProfit(ListBox listBox, object sender)
+        {
+            dataClass = new DataClass();
+            var cb = sender as StackPanel;
+            var item = cb.DataContext;
+            listBox.SelectedItem = item;
+            Profit selectProfit = (Profit)(listBox.SelectedItem);
+            int tempCountList = listBox.Items.Count;
+            DeleteProfit delete = new DeleteProfit(dataClass, selectProfit);
+            delete.Owner = this;
+            delete.ShowDialog();
+            LoadDataIntoProfitsList(listOfProfits);
+            if (tempCountList != listBox.Items.Count)
+            {
+                SnackBarProfit.MessageQueue?.Enqueue("Запись удалена!", null, null, null, false, true,
+                    TimeSpan.FromSeconds(3));
+            }
+        }
+
+        private void SearchProfit(object sender, MouseButtonEventArgs e)
+        {
+            SearchData search = new SearchData(listOfProfits, listOfProfits);
+            search.Owner = this;
+            search.ShowDialog();
+        }
+
+        private void sorttedProfits_click(object sender, MouseButtonEventArgs e)
+        {
+            SortWindow sortWindow = new SortWindow(listOfService, listOfRefills, listOfService, listOfProfits);
+            sortWindow.Owner = this;
+            sortWindow.ShowDialog();
+        }
+
+        private void selectRadiusDateOpenProfit_click(object sender, MouseButtonEventArgs e)
+        {
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfService, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService, listOfProfits, TitleExpOrProf);
+            selectDate.Owner = this;
+            selectDate.ShowDialog();
+            cardAboutAllReport.Visibility = Visibility.Visible;
+            cardInfoAboutItemExpense.Visibility = Visibility.Hidden;
+        }
+
+        private void UIElement_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MonthStatistic monthStatistic = new MonthStatistic();
+            monthStatistic.Owner = this;
+            monthStatistic.ShowDialog();
         }
     }
 }

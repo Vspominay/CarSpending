@@ -213,6 +213,7 @@
     <Compile Include="favorType.cs" />
     <Compile Include="FuelType.cs" />
     <Compile Include="Image.cs" />
+    <Compile Include="ListboxItems\MonthCost.cs" />
     <Compile Include="ListboxItems\TypeOfserviceItems.cs" />
     <Compile Include="MyConverter.cs" />
     <Compile Include="Profit.cs" />
@@ -226,8 +227,14 @@
     <Compile Include="prompt\DeleteExpense.xaml.cs">
       <DependentUpon>DeleteExpense.xaml</DependentUpon>
     </Compile>
+    <Compile Include="prompt\DeleteProfit.xaml.cs">
+      <DependentUpon>DeleteProfit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="prompt\DeleteReminder.xaml.cs">
       <DependentUpon>DeleteReminder.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="prompt\MonthStatistic.xaml.cs">
+      <DependentUpon>MonthStatistic.xaml</DependentUpon>
     </Compile>
     <Compile Include="prompt\promptNotFoundUser.xaml.cs">
       <DependentUpon>promptNotFoundUser.xaml</DependentUpon>
@@ -277,7 +284,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="prompt\DeleteProfit.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="prompt\DeleteReminder.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="prompt\MonthStatistic.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

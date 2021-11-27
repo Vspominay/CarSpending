@@ -24,10 +24,11 @@ namespace CarSpending.prompt
     {
         private MainWindow mainWindow;
         private Run dateRadius_exp, countNote_exp;
-        private ListBox listOfExpenses, listOfRefills, listOfService;
-        private TextBlock totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp;
+        private ListBox listOfExpenses, listOfRefills, listOfService, listOfProfit;
+        private TextBlock totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, TitleExpOrProf;
+        private ApplicationContext db;
 
-        public SelectDateRadius(Run dateRadius_exp,ListBox listOfExpenses,Run countNote_exp, TextBlock totalExpesns_exp, TextBlock dayExpesns_exp, TextBlock totalMileage_exp, TextBlock dayMilage_exp,ListBox listOfRefills, ListBox listOfService)
+        public SelectDateRadius(Run dateRadius_exp,ListBox listOfExpenses,Run countNote_exp, TextBlock totalExpesns_exp, TextBlock dayExpesns_exp, TextBlock totalMileage_exp, TextBlock dayMilage_exp,ListBox listOfRefills, ListBox listOfService,ListBox listOfProfit, TextBlock TitleExpOrProf)
         {
             this.totalExpesns_exp = totalExpesns_exp;
             this.dayExpesns_exp = dayExpesns_exp;
@@ -38,6 +39,8 @@ namespace CarSpending.prompt
             this.countNote_exp = countNote_exp;
             this.listOfRefills = listOfRefills;
             this.listOfService = listOfService;
+            this.listOfProfit = listOfProfit;
+            this.TitleExpOrProf = TitleExpOrProf;
             InitializeComponent();
         }
 
@@ -46,32 +49,16 @@ namespace CarSpending.prompt
             Close();
         }
 
-        private void addDateRadius(object sender, RoutedEventArgs e)
+        public List<Expense> AddDateRadiusEXpension(string expenseDateStart, string expenseDateFinish)
         {
             DataClass dataClass = new DataClass();
-            mainWindow = new MainWindow();
-
-            bool isCorect = true;
-            string expenseDateStart = startDate.Text;
-            string expenseDateFinish = finishtDate.Text;
-
-
-            mainWindow.ValidationDate(startDate, ref expenseDateStart, ref isCorect);
-            mainWindow.ValidationDate(finishtDate, ref expenseDateFinish, ref isCorect);
 
             var test = dataClass.selectQuery("select * from Expenses where Expense_date BETWEEN  '" + expenseDateStart +
                                              "' AND '" + expenseDateFinish + "'").Rows;
 
             var filtersDateList = dataClass.SelecExpenses(test);
 
-            mainWindow.FilterExpense(ref listOfExpenses, new ObservableCollection<Expense>(), new List<Expense>(), filtersDateList,listOfRefills,listOfService);
-
-            // listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
-
-
-            dateRadius_exp.Text = "(" + expenseDateStart.Replace("-", "/") + " - " +
-                                  expenseDateFinish.Replace("-", "/") + ")";// show date raius
-
+            mainWindow.FilterExpense(ref listOfExpenses, new ObservableCollection<Expense>(), new List<Expense>(), filtersDateList, listOfRefills, listOfService);
 
             List<Expense> tempList = new List<Expense>();
 
@@ -102,17 +89,66 @@ namespace CarSpending.prompt
                 tempList = filtersDateList;
             }
 
-            countNote_exp.Text = tempList.Count+"";// show count notes 
-            var calcutaeStatistick = countTotalCost(tempList);
-            totalExpesns_exp.Text = calcutaeStatistick["totalCost"] + " км";
-            dayExpesns_exp.Text = calcutaeStatistick["averageCost"] + " км";
-            totalMileage_exp.Text = calcutaeStatistick["resultMileage"] + " ₴";
-            dayMilage_exp.Text = calcutaeStatistick["averageMileage"]+ " ₴";
+            return tempList;
+        }
+
+        public List<Profit> AddDateRadiusProfit(string expenseDateStart, string expenseDateFinish, ref ListBox listOfProfit)
+        {
+            db = new ApplicationContext();
+            List<Profit> result = new List<Profit>();
+
+            foreach (var profit in db.Profits)
+            {
+                DateTime timeProf = DateTime.Parse(profit.Profit_date);
+                if (timeProf >= DateTime.Parse(expenseDateStart) && timeProf <= DateTime.Parse(expenseDateFinish))
+                {
+                    result.Add(profit);
+                }
+            }
+
+            listOfProfit.ItemsSource = new ObservableCollection<Profit>(result);
+            return result;
+        }
+        private void AddDateRadius(object sender, RoutedEventArgs e)
+        {
+            DataClass dataClass = new DataClass();
+            mainWindow = new MainWindow();
+
+            bool isCorect = true;
+            string expenseDateStart = startDate.Text;
+            string expenseDateFinish = finishtDate.Text;
+
+            mainWindow.ValidationDate(startDate, ref expenseDateStart, ref isCorect);
+            mainWindow.ValidationDate(finishtDate, ref expenseDateFinish, ref isCorect);
+
+            Dictionary<string, double> calcutaeStatistick;
+
+            if (listOfProfit != null)
+            {
+                var profitList = AddDateRadiusProfit( expenseDateStart, expenseDateFinish,ref listOfProfit);
+                calcutaeStatistick = CountTotalCostProfit(profitList);
+                countNote_exp.Text = profitList.Count() + "";
+                TitleExpOrProf.Text = "Прибыль за период";
+            }
+            else
+            {
+                var expenseList = AddDateRadiusEXpension(expenseDateStart, expenseDateFinish);
+                calcutaeStatistick = CountTotalCost(expenseList);
+                countNote_exp.Text = expenseList.Count() + "";
+                TitleExpOrProf.Text = "Траты за период";
+            }
+
+            dateRadius_exp.Text = "(" + expenseDateStart.Replace("-", "/") + " - " +
+                                  expenseDateFinish.Replace("-", "/") + ")"; // show date raius
+            totalExpesns_exp.Text = calcutaeStatistick["totalCost"] + " ₴";
+            dayExpesns_exp.Text = calcutaeStatistick["averageCost"] + " ₴";
+            totalMileage_exp.Text = calcutaeStatistick["resultMileage"] + " км";
+            dayMilage_exp.Text = calcutaeStatistick["averageMileage"]+ " км";
             Close();
             
         }
 
-        public Dictionary<string, double> countTotalCost(List<Expense> filtersDateList)//get all values for general statistic
+        public Dictionary<string, double> CountTotalCost(List<Expense> filtersDateList)//get all values for general statistic
         {
             Dictionary<string, double> resultDictionary = new Dictionary<string, double>();
             double result = 0;
@@ -124,6 +160,25 @@ namespace CarSpending.prompt
             }
             resultDictionary.Add("totalCost",result);
             resultDictionary.Add("averageCost", result/ filtersDateList.Count);
+            resultDictionary.Add("resultMileage", resultMileage);
+            resultDictionary.Add("averageMileage", resultMileage / filtersDateList.Count);
+
+
+            return resultDictionary;
+        }
+
+        public Dictionary<string, double> CountTotalCostProfit(List<Profit> filtersDateList)//get all values for general statistic
+        {
+            Dictionary<string, double> resultDictionary = new Dictionary<string, double>();
+            double result = 0;
+            double resultMileage = 0;
+            foreach (Profit itemProfit in filtersDateList)
+            {
+                result += itemProfit.ProfitMargin_num;
+                resultMileage += itemProfit.Mileage_num;
+            }
+            resultDictionary.Add("totalCost", result);
+            resultDictionary.Add("averageCost", result / filtersDateList.Count);
             resultDictionary.Add("resultMileage", resultMileage);
             resultDictionary.Add("averageMileage", resultMileage / filtersDateList.Count);
 

@@ -50,7 +50,7 @@
                         IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Width="100" HorizontalAlignment="Left"  />
 
                     <Button 
-                        Click="addDateRadius"
+                        Click="AddDateRadius"
                         Margin="0,20,0,0"
                             Style="{StaticResource MaterialDesignRaisedDarkButton}"
                             Content="Применить"

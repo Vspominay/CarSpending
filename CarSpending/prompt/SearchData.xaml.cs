@@ -21,12 +21,15 @@ namespace CarSpending.prompt
     /// </summary>
     public partial class SearchData : Window
     {
-        private ListBox listOfExpenses;
+        private ListBox listOfExpenses, listOfProfits;
         private MainWindow main;
         private DataClass dataClass;
-        public SearchData(ListBox listOfExpenses)
+        private ApplicationContext db;
+        public SearchData(ListBox listOfExpenses,ListBox listOfProfits)
         {
+            db = new ApplicationContext();
             this.listOfExpenses = listOfExpenses;
+            this.listOfProfits = listOfProfits;
             InitializeComponent();
         }
 
@@ -40,6 +43,8 @@ namespace CarSpending.prompt
             main = new MainWindow();
             dataClass = new DataClass();
 
+
+
             var serachCost = searchCost_rad;
             var searchMileage = searchMileage_rad;
             var inputSearch = searchInput;
@@ -47,16 +52,40 @@ namespace CarSpending.prompt
             double mileage = 0;
             bool isCorect = true;
             string patternText = @"[-!#\$%&'\*\+/=\?\@]";
+            string fromTable = "";
+            string totalCostName = "";
+
+            if (listOfExpenses == listOfProfits)
+            {
+                fromTable = "Profits";
+                totalCostName = "profitMargin_num";
+            }
+            else
+            {
+                fromTable = "Expenses";
+                totalCostName = "TotalCost";
+            }
 
             if (serachCost.IsChecked == true)
             {
-                main.validationCost(inputSearch,ref totalCost,ref isCorect, patternText);
+                main.validationCost(inputSearch, ref totalCost, ref isCorect, patternText);
                 if (isCorect)
                 {
-                    var itemCost = dataClass.selectQuery("select * from Expenses where TotalCost = " + totalCost).Rows;
+                    if (listOfExpenses == listOfProfits)
+                    {
+                        var filtersDateListProf = db.Profits.Where(p => p.ProfitMargin_num == totalCost);
+                        listOfExpenses.ItemsSource = new ObservableCollection<Profit>(filtersDateListProf);
+                    }
+                    else
+                    {
+                        var itemCost = dataClass.selectQuery("select * from Expenses where TotalCost = " + totalCost)
+                            .Rows;
+                        var filtersDateList = dataClass.SelecExpenses(itemCost);
+                        listOfExpenses.ItemsSource =
+                            new ObservableCollection<Expense>(
+                                filtersDateList); // push items into listblock with expenses
+                    }
 
-                    var filtersDateList = dataClass.SelecExpenses(itemCost);
-                    listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
                     Close();
                 }
             }
@@ -65,10 +94,18 @@ namespace CarSpending.prompt
                 main.validationCost(inputSearch, ref mileage, ref isCorect, patternText);
                 if (isCorect)
                 {
-                    var itemCost = dataClass.selectQuery("select * from Expenses where Mileage_num = " + mileage).Rows;
+                    if (listOfExpenses == listOfProfits)
+                    {
+                        var filtersDateListProf = db.Profits.Where(p => p.Mileage_num == mileage);
+                        listOfExpenses.ItemsSource = new ObservableCollection<Profit>(filtersDateListProf);
+                    }
+                    else
+                    {
+                        var itemCost = dataClass.selectQuery("select * from Expenses where Mileage_num = " + mileage).Rows;
+                        var filtersDateList = dataClass.SelecExpenses(itemCost);
+                        listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
+                    }
 
-                    var filtersDateList = dataClass.SelecExpenses(itemCost);
-                    listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
                     Close();
                 }
             }
