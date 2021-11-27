@@ -2449,6 +2449,7 @@ x:Name="listOfProfits"
                             Padding="0,15"
                             >
                             <Grid 
+                                x:Name="print"
                              VerticalAlignment="Top" Height="560"
                             >
                                 <Grid.ColumnDefinitions>
@@ -2472,7 +2473,9 @@ x:Name="listOfProfits"
                                 <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="3" X1="0"  X2="950"   ></Line>
 
 
-                                <materialDesign:PackIcon Kind="FilePdfBox"  Grid.Row="8"
+                                <materialDesign:PackIcon 
+                                    PreviewMouseLeftButtonDown="makeReport"
+                                    Kind="FilePdfBox"  Grid.Row="8"
                                                          Foreground="#FF303F9F"
                                                          Margin="15,0"
                                                          VerticalAlignment="Bottom" HorizontalAlignment="Left"
@@ -2626,6 +2629,7 @@ x:Name="listOfProfits"
                             Padding="0,15"
                             >
                             <Grid 
+                                x:Name="reportExpense"
                              VerticalAlignment="Top" Height="560"
                             >
                                 <Grid.ColumnDefinitions>
@@ -2652,7 +2656,9 @@ x:Name="listOfProfits"
                                 <Line Grid.ColumnSpan="2" Grid.Row="1" Stroke="#FF303F9F" StrokeThickness="2" Y1="7" Y2="7" X1="0"  X2="950"   ></Line>
 
 
-                                <materialDesign:PackIcon Kind="FilePdfBox" Grid.Row="8"
+                                <materialDesign:PackIcon
+                                    PreviewMouseLeftButtonDown="makeReportExpens"
+                                    Kind="FilePdfBox" Grid.Row="8"
                                                          Foreground="#FF303F9F"
                                                          Margin="15,0"
                                                          VerticalAlignment="Bottom" HorizontalAlignment="Left"

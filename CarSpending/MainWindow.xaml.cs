@@ -1322,5 +1322,39 @@ namespace CarSpending
             monthStatistic.Owner = this;
             monthStatistic.ShowDialog();
         }
+
+        private void makeReport(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                this.IsEnabled = false;
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(print, "Общий отчёт за период");
+                }
+            }
+            finally
+            {
+                this.IsEnabled = true;
+            }
+        }
+
+        private void makeReportExpens(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                this.IsEnabled = false;
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(reportExpense, "Общий отчёт за период");
+                }
+            }
+            finally
+            {
+                this.IsEnabled = true;
+            }
+        }
     }
 }

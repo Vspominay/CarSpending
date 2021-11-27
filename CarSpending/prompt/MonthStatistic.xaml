@@ -18,7 +18,7 @@
                                VerticalAlignment="Center" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F">
                     </TextBlock>
                 </Grid>
-                <StackPanel Margin="40,0" VerticalAlignment="Center">
+                <StackPanel x:Name="reportMont" Margin="40,0" VerticalAlignment="Center">
                     <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center">
 
                         <StackPanel Orientation="Horizontal"  VerticalAlignment="Top">
@@ -78,24 +78,91 @@
 
                     </StackPanel>
                 </StackPanel>
-              
 
-                
+
+                <StackPanel Visibility="Collapsed"  Margin="40,0" VerticalAlignment="Center">
+                    <Grid x:Name="reportMontRep">
+                    <StackPanel   Orientation="Horizontal" HorizontalAlignment="Center">
+
+                        <StackPanel Orientation="Horizontal"  VerticalAlignment="Top">
+                            <materialDesign:PackIcon Kind="CalendarMonthOutline" Foreground="#FF303F9F"
+                                                         VerticalAlignment="Center" Height="40" Width="40" />
+                            <TextBlock Margin="5,0,0,0" FontSize="16" Foreground="Gray" Text="месяц/ год"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center">
+                            </TextBlock>
+                        </StackPanel>
+
+                        <TextBlock Width="150px"></TextBlock>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,15,0" 
+                                        VerticalAlignment="Top" HorizontalAlignment="Right">
+                            <materialDesign:PackIcon Kind="Cash" Foreground="#FF303F9F"
+                                                         VerticalAlignment="Center" Height="40" Width="40" />
+                            <TextBlock Margin="5,0,0,0" FontSize="16" Foreground="Gray" Text="общая сумма"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center">
+                            </TextBlock>
+                        </StackPanel>
+
+
+
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Orientation="Vertical"
+                        TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                        Margin="24,8,24,16">
+                        <TextBlock>
+<ScrollViewer>
+                            <ListBox
+                                Margin="170,50,0,0"
+                                Height="600"
+                                x:Name="topCostListRep"
+                                VerticalAlignment="Top">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            Orientation="Vertical"
+                                            TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                            Margin="24,8,24,16" HorizontalAlignment="Center">
+                                            <Grid Width="400"  VerticalAlignment="Center" >
+                                                <TextBlock FontSize="20" Foreground="#FF303F9F" FontWeight="Bold" Text="{Binding Path=MonthName}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                                                <TextBlock Margin="0,0,70,0" FontSize="20" Foreground="#FF303F9F" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <Run Text="{Binding Path=TotalCost}" ></Run>
+                                                    <Run Text=" ₴"></Run>
+                                                </TextBlock>
+                                            </Grid>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+</ScrollViewer>
+                        </TextBlock>
+
+                    </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+
 
 
 
                 <Grid >
                     <Button 
                         Click="ButtonBase_OnClick"
-                        Margin="0,20,55,0"
+                        
                             Style="{StaticResource MaterialDesignOutlinedDarkButton}"                        Content="Закрыть"
-                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Width="100" HorizontalAlignment="Left"  />
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Width="100" HorizontalAlignment="Center"  />
 
-                    <Button 
-                        Margin="0,20,0,0"
-                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                            Content="Применить"
-                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" Width="115" HorizontalAlignment="Right"  />
+                    <materialDesign:PackIcon 
+                        PreviewMouseLeftButtonDown="makeReport"
+                        Kind="FilePdfBox"  Grid.Row="8"
+                        Foreground="#FF303F9F"
+                        Margin="15,0"
+                        VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                        ToolTip="Нажмите для формирования отчёта" Height="37" Width="41"
+                    />
                 </Grid>
             </StackPanel>
 

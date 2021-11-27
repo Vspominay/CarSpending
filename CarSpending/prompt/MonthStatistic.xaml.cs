@@ -53,11 +53,29 @@ namespace CarSpending.prompt
             }
 
             topCostList.ItemsSource = new ObservableCollection<MonthCost>(filtersDateList);
+            topCostListRep.ItemsSource = new ObservableCollection<MonthCost>(filtersDateList);
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void makeReport(object sender, MouseButtonEventArgs e)
+        {
+            try
+            {
+                this.IsEnabled = false;
+                PrintDialog printDialog = new PrintDialog();
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(reportMontRep, "Общий отчёт за период");
+                }
+            }
+            finally
+            {
+                this.IsEnabled = true;
+            }
         }
     }
 }
