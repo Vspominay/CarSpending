@@ -21,6 +21,8 @@ namespace CarSpending
         public DbSet <ProfitType> ProfitTypes { get; set; }
         public  DbSet <Profit> Profits { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
+
+        public DbSet<Automation> Automations { get; set; }
         public ApplicationContext() : base("DefaultConnection") {}
     }
 }

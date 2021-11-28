@@ -18,18 +18,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CarSpending.prompt;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Data.SqlClient;
 using System.Data.SQLite;
-using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using System.Threading;
 using CarSpending.ListboxItems;
 using MaterialDesignThemes.Wpf;
-using Microsoft.Win32;
 using f = System.Windows.Forms;
+using Wpf.CartesianChart.SolidColorChart;
 
 namespace CarSpending
 {
@@ -38,7 +34,7 @@ namespace CarSpending
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int clickCount = 0;
+
         private ApplicationContext db;
         public ObservableCollection<FuelType> FuelTypes { get; set; }
 
@@ -490,6 +486,36 @@ namespace CarSpending
                 HintAssist.SetHint(datePicker, "Некоректно заполненое поле");
             }
         }
+
+        public void MakeAutomation(double amountLiter, double carMileage)
+        {
+            dataClass = new DataClass();
+            double tankVolume = userCars[ComboBoxCars.SelectedIndex].TankVolume_num;
+            var beforeRefillList = db.Refills.OrderByDescending(r => r.Refill_id).Take(1).ToList();
+            
+            double beforeRefillLiters = beforeRefillList[0].AmountLiter_num;
+            double tempLiters = tankVolume - amountLiter;
+
+            var tempBeforeMileage = dataClass.selectQuery("SELECT * from expenses where Refill_id = " + beforeRefillList[0].Refill_id).Rows;
+
+            var beforeMileage = dataClass.SelecExpenses(tempBeforeMileage);
+
+            double resultValue = (beforeRefillLiters - tempLiters) / (carMileage - beforeMileage[0].Mileage_num) * 100;
+
+            if (db.Automations.ToList().Any(au => au.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id && au.AutData != ""))
+            {
+                var selectAut = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id);
+                selectAut.AutData += " " + resultValue;
+            }
+            else
+            {
+                Automation newAut = new Automation(userCars[ComboBoxCars.SelectedIndex].Car_id, resultValue+"");
+                db.Automations.Add(newAut);
+            }
+            db.SaveChanges();
+
+        }
+
         private void addNoteAboutRefill_click(object sender, RoutedEventArgs e) // add note about refill
         {
             var fuelSelect = (FuelType)typesOfFuel.SelectedItem;
@@ -505,71 +531,13 @@ namespace CarSpending
 
             ValidationMileage(mileage_refill,ref carMileage,ref isCorect);
 
-            /*if (mileage_refill.Text.Length <= 0 ||
-                !Regex.IsMatch(mileage_refill.Text, @"^[0-9,.]*$", RegexOptions.IgnoreCase)) // check car mileage
-            {
-                mileage_refill.Foreground = Brushes.DarkRed;
-                TextFieldAssist.SetUnderlineBrush(mileage_refill, Brushes.DarkRed);
-                HintAssist.SetHint(mileage_refill, "Некоректно заполненое поле ");
-                isCorect = false;
-            }
-            else
-            {
-                if (mileage_refill.Text.Trim().Contains('.'))
-                {
-                    CarMileage = Convert.ToDouble(mileage_refill.Text.Trim().Replace('.', ','));
-                }
-                else
-                {
-                    CarMileage = Convert.ToDouble(mileage_refill.Text.Trim());
-                }
-            }*/
-
 
 
             validationCost(literCost_refill,ref literCost,ref isCorect, patternText);
-            /*if (literCost_refill.Text.Length <= 0 || Regex.IsMatch(literCost_refill.Text, patternText,
-                                                      RegexOptions.IgnoreCase)
-                                                  || Regex.IsMatch(literCost_refill.Text, @"[a-zA-Z]",
-                                                      RegexOptions.IgnoreCase)) // check liter cost
-            {
-                literCost_refill.Foreground = Brushes.DarkRed;
-                TextFieldAssist.SetUnderlineBrush(literCost_refill, Brushes.DarkRed);
-                HintAssist.SetHint(literCost_refill, "Некоректно заполненое поле");
-                isCorect = false;
-            }
-            else
-            {
-                if (literCost_refill.Text.Trim().Contains('.'))
-                {
-                    LiterCost = Convert.ToDouble(literCost_refill.Text.Trim().Replace('.', ','));
-                }
-                else
-                {
-                    LiterCost = Convert.ToDouble(literCost_refill.Text.Trim());
-                }
-            }*/
+           
 
             validationCost(amountLiters_refill,ref amountLiter,ref isCorect, patternText);
-            /*if (amountLiters_refill.Text.Length <= 0 ||
-                Regex.IsMatch(amountLiters_refill.Text, patternText, RegexOptions.IgnoreCase)) // check Amount Liter
-            {
-                amountLiters_refill.Foreground = Brushes.DarkRed;
-                TextFieldAssist.SetUnderlineBrush(amountLiters_refill, Brushes.DarkRed);
-                HintAssist.SetHint(amountLiters_refill, "Некоректно заполненое поле");
-                isCorect = false;
-            }
-            else
-            {
-                if (amountLiters_refill.Text.Trim().Contains('.'))
-                {
-                    AmountLiter = Convert.ToDouble(amountLiters_refill.Text.Trim().Replace('.', ','));
-                }
-                else
-                {
-                    AmountLiter = Convert.ToDouble(amountLiters_refill.Text.Trim());
-                }
-            }*/
+            
 
             if (Fulltank_refill.IsChecked == true) fullTank = 1;//checking full tank or no
 
@@ -588,20 +556,13 @@ namespace CarSpending
 
             ValidationDate(expenseDate_refill, ref expenseDate, ref isCorect);
 
-            // if (DateTime.TryParse(expenseDate_refill.Text, out dt))
-            // {
-            //     ExpenseDate = ToDateSqlite(DateTime.Parse(expenseDate_refill.Text));
-            // }
-            // else
-            // {
-            //     isCorect = false;
-            //     expenseDate_refill.Foreground = Brushes.DarkRed;
-            //     TextFieldAssist.SetUnderlineBrush(expenseDate_refill, Brushes.DarkRed);
-            //     HintAssist.SetHint(expenseDate_refill, "Некоректно заполненое поле");
-            // }
-
             if (isCorect)
             {
+                if (fullTank == 1)
+                {
+                    MakeAutomation(amountLiter, carMileage);
+                }
+
                 Refill newRefill = new Refill(fuelId, literCost, amountLiter, fullTank);
 
                 db.Refills.Add(newRefill);
@@ -1355,6 +1316,13 @@ namespace CarSpending
             {
                 this.IsEnabled = true;
             }
+        }
+
+        private void showGraphic(object sender, MouseButtonEventArgs e)
+        {
+            SolidColorExample drawGraph = new SolidColorExample(userCars[ComboBoxCars.SelectedIndex]);
+            drawGraph.Owner = this;
+            drawGraph.ShowDialog();
         }
     }
 }

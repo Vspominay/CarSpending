@@ -1613,9 +1613,9 @@ x:Name="listOfExpenses"
                                             <Line Margin="10,0,0,0" Stroke="#FF303F9F" StrokeThickness="1"
                                                   Grid.Column="9" Y1="40">
                                             </Line>
-                                            <Grid Grid.Column="9" Grid.ColumnSpan="3" Margin="25,0,0,0"
+                                            <StackPanel Orientation="Horizontal" Grid.Column="9" Grid.ColumnSpan="3" Margin="25,0,0,0"
                                                   VerticalAlignment="Center">
-                                                <StackPanel PreviewMouseLeftButtonDown="SearchNotesinRefills"  ToolTip="Поиск по тратам">
+                                                <StackPanel PreviewMouseLeftButtonDown="SearchNotesinRefills"  ToolTip="Поиск по тратам" HorizontalAlignment="Left" VerticalAlignment="Center">
                                                     <materialDesign:PackIcon Kind="Magnify" Foreground="#FF303F9F"
                                                                              Width="30" Height="30" />
                                                 </StackPanel>
@@ -1632,9 +1632,12 @@ x:Name="listOfExpenses"
                                                     <materialDesign:PackIcon Kind="SortVariant" Foreground="#FF303F9F"
                                                                              Width="30" Height="30" />
                                                 </StackPanel>
+                                                <StackPanel PreviewMouseLeftButtonDown="showGraphic" ToolTip="Сортировка" HorizontalAlignment="Right">
+                                                    <materialDesign:PackIcon Kind="ChartAreaspline" Foreground="#FF303F9F"
+                                                                             Width="30" Height="30" />
+                                                </StackPanel>
 
-
-                                            </Grid>
+                                            </StackPanel>
 
                                         </Grid>
                                         <Line Grid.Row="1" Stroke="#FF303F9F" Margin="0,10,0,0" StrokeThickness="3"
