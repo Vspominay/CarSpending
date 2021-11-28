@@ -135,7 +135,7 @@ namespace CarSpending
             {
                 try
                 {
-                    profitList = db.Profits.ToList();
+                    profitList = db.Profits.Where(pr=> pr.User_id == user.User_id).ToList();
                     listOfProfits.ItemsSource = new ObservableCollection<Profit>(profitList);
                 }
                 catch (Exception e)
@@ -158,7 +158,7 @@ namespace CarSpending
             try
             {
 
-                string sqlQuery = "SELECT * from Expenses";
+                string sqlQuery = "SELECT * from Expenses WHERE Car_id = " + userCars[ComboBoxCars.SelectedIndex].Car_id;
                 SQLiteDataAdapter adapter = new SQLiteDataAdapter(sqlQuery, "Data Source=.\\spendingCar.db");
                 adapter.Fill(dTable);
 
@@ -1039,7 +1039,9 @@ namespace CarSpending
                 listOfRefills,
                 listOfService,
                 null,
-                TitleExpOrProf);
+                TitleExpOrProf,
+                userCars[ComboBoxCars.SelectedIndex],
+                user);
 
             selectDate.Owner = this;
             selectDate.ShowDialog();
@@ -1051,7 +1053,7 @@ namespace CarSpending
 
         private void SearchNotesinExpenses(object sender, MouseButtonEventArgs e)//search notes in expenses used date and mileage
         {
-            SearchData search = new SearchData(listOfExpenses,listOfProfits);
+            SearchData search = new SearchData(listOfExpenses,listOfProfits, userCars[ComboBoxCars.SelectedIndex],user);
             search.Owner = this;
             search.ShowDialog();
 
@@ -1059,7 +1061,11 @@ namespace CarSpending
 
         private void sorttedExpenses_click(object sender, MouseButtonEventArgs e)
         {
-            SortWindow sortWindow = new SortWindow(listOfExpenses, listOfRefills, listOfService,null);
+            SortWindow sortWindow = new SortWindow(listOfExpenses,
+                listOfRefills,
+                listOfService,
+                null,
+                userCars[ComboBoxCars.SelectedIndex],user);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
         }
@@ -1161,14 +1167,26 @@ namespace CarSpending
 
         private void SearchNotesinRefills(object sender, MouseButtonEventArgs e)
         {
-            SearchData search = new SearchData(listOfRefills, listOfProfits);
+            SearchData search = new SearchData(listOfRefills, listOfProfits, userCars[ComboBoxCars.SelectedIndex], user);
             search.Owner = this;
             search.ShowDialog();
         }
 
         private void selectRadiusDateOpenRefil_click(object sender, MouseButtonEventArgs e)
         {
-            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfRefills, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService,null, TitleExpOrProf);
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp,
+                listOfRefills,
+                countNote_exp,
+                totalExpesns_exp,
+                dayExpesns_exp,
+                totalMileage_exp,
+                dayMilage_exp,
+                listOfRefills,
+                listOfService,
+                null,
+                TitleExpOrProf,
+                userCars[ComboBoxCars.SelectedIndex],
+                user);
             selectDate.Owner = this;
             selectDate.ShowDialog();
             cardAboutAllReport.Visibility = Visibility.Visible;
@@ -1177,14 +1195,26 @@ namespace CarSpending
 
         private void SearchNotesinServices(object sender, MouseButtonEventArgs e)
         {
-            SearchData search = new SearchData(listOfService, listOfProfits);
+            SearchData search = new SearchData(listOfService, listOfProfits, userCars[ComboBoxCars.SelectedIndex], user);
             search.Owner = this;
             search.ShowDialog();
         }
 
         private void selectRadiusDateOpenService_click(object sender, MouseButtonEventArgs e)
         {
-            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfService, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService,null, TitleExpOrProf);
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp,
+                listOfService,
+                countNote_exp,
+                totalExpesns_exp,
+                dayExpesns_exp,
+                totalMileage_exp,
+                dayMilage_exp,
+                listOfRefills,
+                listOfService,
+                null,
+                TitleExpOrProf,
+                userCars[ComboBoxCars.SelectedIndex],
+                user);
             selectDate.Owner = this;
             selectDate.ShowDialog();
             cardAboutAllReport.Visibility = Visibility.Visible;
@@ -1193,14 +1223,22 @@ namespace CarSpending
 
         private void sorttedRefils_click(object sender, MouseButtonEventArgs e)
         {
-            SortWindow sortWindow = new SortWindow(listOfRefills, listOfRefills, listOfService,null);
+            SortWindow sortWindow = new SortWindow(listOfRefills,
+                listOfRefills,
+                listOfService,
+                null,
+                userCars[ComboBoxCars.SelectedIndex],user);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
         }
 
         private void sorttedService_click(object sender, MouseButtonEventArgs e)
         {
-            SortWindow sortWindow = new SortWindow(listOfService,listOfRefills,listOfService,null);
+            SortWindow sortWindow = new SortWindow(listOfService,
+                listOfRefills,
+                listOfService,
+                null,
+                userCars[ComboBoxCars.SelectedIndex],user);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
         }
@@ -1256,21 +1294,37 @@ namespace CarSpending
 
         private void SearchProfit(object sender, MouseButtonEventArgs e)
         {
-            SearchData search = new SearchData(listOfProfits, listOfProfits);
+            SearchData search = new SearchData(listOfProfits, listOfProfits, userCars[ComboBoxCars.SelectedIndex],user);
             search.Owner = this;
             search.ShowDialog();
         }
 
         private void sorttedProfits_click(object sender, MouseButtonEventArgs e)
         {
-            SortWindow sortWindow = new SortWindow(listOfService, listOfRefills, listOfService, listOfProfits);
+            SortWindow sortWindow = new SortWindow(listOfService,
+                listOfRefills,
+                listOfService,
+                listOfProfits,
+                userCars[ComboBoxCars.SelectedIndex],user);
             sortWindow.Owner = this;
             sortWindow.ShowDialog();
         }
 
         private void selectRadiusDateOpenProfit_click(object sender, MouseButtonEventArgs e)
         {
-            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp, listOfService, countNote_exp, totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, listOfRefills, listOfService, listOfProfits, TitleExpOrProf);
+            SelectDateRadius selectDate = new SelectDateRadius(dateRadius_exp,
+                listOfService,
+                countNote_exp,
+                totalExpesns_exp,
+                dayExpesns_exp,
+                totalMileage_exp,
+                dayMilage_exp,
+                listOfRefills,
+                listOfService,
+                listOfProfits,
+                TitleExpOrProf,
+                userCars[ComboBoxCars.SelectedIndex],
+                user);
             selectDate.Owner = this;
             selectDate.ShowDialog();
             cardAboutAllReport.Visibility = Visibility.Visible;

@@ -21,16 +21,19 @@ namespace Wpf.CartesianChart.SolidColorChart
             db = new ApplicationContext();
             InitializeComponent();
 
-            var dataGraph = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == car.Car_id).AutData.Split(' ');
-            List<double> test = new List<double>();
-
-            foreach (var itemArr in dataGraph)
+            if (db.Automations != null)
             {
-                test.Add(Convert.ToDouble(itemArr));
-            }
+                var dataGraph = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == car.Car_id).AutData.Split(' ');
+                List<double> test = new List<double>();
+
+                foreach (var itemArr in dataGraph)
+                {
+                    test.Add(Convert.ToDouble(itemArr));
+                }
 
             
-            Values = new ChartValues<double>(test);
+                Values = new ChartValues<double>(test);
+            }
 
             DataContext = this;
         }

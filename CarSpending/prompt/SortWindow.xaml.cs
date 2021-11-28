@@ -25,11 +25,15 @@ namespace CarSpending.prompt
         private DataClass dataClass;
         private MainWindow mainWindow;
         private ApplicationContext db;
-        public SortWindow(ListBox listOfExpenses,ListBox listOfRefills,ListBox listOfService,ListBox listOfProfit)
+        private Car userCar;
+        private User user;
+        public SortWindow(ListBox listOfExpenses,ListBox listOfRefills,ListBox listOfService,ListBox listOfProfit, Car userCar, User user)
         {
             InitializeComponent();
             this.listOfExpenses = listOfExpenses;
             this.listOfProfit = listOfProfit;
+            this.userCar = userCar;
+            this.user = user;
             listRef = listOfRefills;
             listSer = listOfService;
 
@@ -67,15 +71,15 @@ namespace CarSpending.prompt
 
             if (sortedCost.IsChecked == true)
             {
-                listProf = DescRad.IsChecked == true ? db.Profits.OrderByDescending(p=>p.ProfitMargin_num).ToList() : db.Profits.OrderBy(p => p.ProfitMargin_num).ToList();
+                listProf = DescRad.IsChecked == true ? db.Profits.Where(pr=> pr.User_id == user.User_id).OrderByDescending(p=>p.ProfitMargin_num).ToList() : db.Profits.Where(pr=> pr.User_id == user.User_id).OrderBy(p => p.ProfitMargin_num).ToList();
             }
             else if (sortedMileage.IsChecked == true)
             {
-                listProf = DescRad.IsChecked == true ? db.Profits.OrderByDescending(p => p.Mileage_num).ToList() : db.Profits.OrderBy(p => p.Mileage_num).ToList();
+                listProf = DescRad.IsChecked == true ? db.Profits.Where(pr=> pr.User_id == user.User_id).OrderByDescending(p => p.Mileage_num).ToList() : db.Profits.Where(pr=> pr.User_id == user.User_id).OrderBy(p => p.Mileage_num).ToList();
             }
             else if (sortedTime.IsChecked == true)
             {
-                listProf = DescRad.IsChecked == true ? db.Profits.OrderByDescending(p => p.Profit_date).ToList() : db.Profits.OrderBy(p => p.Profit_date).ToList();
+                listProf = DescRad.IsChecked == true ? db.Profits.Where(pr=> pr.User_id == user.User_id).OrderByDescending(p => p.Profit_date).ToList() : db.Profits.Where(pr=> pr.User_id == user.User_id).OrderBy(p => p.Profit_date).ToList();
             }
 
             listOfProfits.ItemsSource = new ObservableCollection<Profit>(listProf);
@@ -95,15 +99,15 @@ namespace CarSpending.prompt
 
             if (sortedCost.IsChecked == true )
             {
-                itemCost = DescRad.IsChecked == true ? dataClass.selectQuery("SELECT * from Expenses ORDER by TotalCost DESC").Rows : dataClass.selectQuery("SELECT * from Expenses ORDER by TotalCost").Rows;
-            }
-            else if(sortedMileage.IsChecked == true)
-            {
-                itemCost = DescRad.IsChecked == true ? dataClass.selectQuery("SELECT * from Expenses ORDER by Mileage_num DESC").Rows : dataClass.selectQuery("SELECT * from Expenses ORDER by Mileage_num").Rows;
-            }
-            else if (sortedTime.IsChecked == true)
-            {
-                itemCost = DescRad.IsChecked == true ? dataClass.selectQuery("SELECT * from Expenses ORDER by Expense_date DESC").Rows : dataClass.selectQuery("SELECT * from Expenses ORDER by Expense_date").Rows;
+                itemCost = DescRad.IsChecked == true ? dataClass.selectQuery("SELECT * from Expenses where Car_id = " + userCar.Car_id + " ORDER by TotalCost DESC").Rows : dataClass.selectQuery("SELECT * from Expenses where Car_id = " + userCar.Car_id + " ORDER by TotalCost").Rows;
+            }                                                                                       
+            else if(sortedMileage.IsChecked == true)                                                
+            {                                                                                       
+                itemCost = DescRad.IsChecked == true ? dataClass.selectQuery("SELECT * from Expenses where Car_id = " + userCar.Car_id + " ORDER by Mileage_num DESC").Rows : dataClass.selectQuery("SELECT * from Expenses where Car_id = " + userCar.Car_id + " ORDER by Mileage_num").Rows;
+            }                                                                                       
+            else if (sortedTime.IsChecked == true)                                                  
+            {                                                                                       
+                itemCost = DescRad.IsChecked == true ? dataClass.selectQuery("SELECT * from Expenses where Car_id = " + userCar.Car_id + " ORDER by Expense_date DESC").Rows : dataClass.selectQuery("SELECT * from Expenses where Car_id = " + userCar.Car_id + " ORDER by Expense_date").Rows;
             }
             var filtersDateList = dataClass.SelecExpenses(itemCost);
             mainWindow.FilterExpense(ref listOfExpenses,new ObservableCollection<Expense>(),new List<Expense>(), filtersDateList,listRef,listSer);

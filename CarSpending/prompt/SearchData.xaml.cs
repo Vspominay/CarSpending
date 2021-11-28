@@ -25,11 +25,15 @@ namespace CarSpending.prompt
         private MainWindow main;
         private DataClass dataClass;
         private ApplicationContext db;
-        public SearchData(ListBox listOfExpenses,ListBox listOfProfits)
+        private Car userCar;
+        private User user;
+        public SearchData(ListBox listOfExpenses,ListBox listOfProfits,Car userCar, User user)
         {
             db = new ApplicationContext();
             this.listOfExpenses = listOfExpenses;
             this.listOfProfits = listOfProfits;
+            this.userCar = userCar;
+            this.user = user;
             InitializeComponent();
         }
 
@@ -52,19 +56,7 @@ namespace CarSpending.prompt
             double mileage = 0;
             bool isCorect = true;
             string patternText = @"[-!#\$%&'\*\+/=\?\@]";
-            string fromTable = "";
-            string totalCostName = "";
 
-            if (listOfExpenses == listOfProfits)
-            {
-                fromTable = "Profits";
-                totalCostName = "profitMargin_num";
-            }
-            else
-            {
-                fromTable = "Expenses";
-                totalCostName = "TotalCost";
-            }
 
             if (serachCost.IsChecked == true)
             {
@@ -73,12 +65,12 @@ namespace CarSpending.prompt
                 {
                     if (listOfExpenses == listOfProfits)
                     {
-                        var filtersDateListProf = db.Profits.Where(p => p.ProfitMargin_num == totalCost);
+                        var filtersDateListProf = db.Profits.Where(p => p.ProfitMargin_num == totalCost && p.User_id == user.User_id);
                         listOfExpenses.ItemsSource = new ObservableCollection<Profit>(filtersDateListProf);
                     }
                     else
                     {
-                        var itemCost = dataClass.selectQuery("select * from Expenses where TotalCost = " + totalCost)
+                        var itemCost = dataClass.selectQuery("select * from Expenses where TotalCost = " + totalCost + " AND Car_id = " + userCar.Car_id)
                             .Rows;
                         var filtersDateList = dataClass.SelecExpenses(itemCost);
                         listOfExpenses.ItemsSource =
@@ -96,12 +88,12 @@ namespace CarSpending.prompt
                 {
                     if (listOfExpenses == listOfProfits)
                     {
-                        var filtersDateListProf = db.Profits.Where(p => p.Mileage_num == mileage);
+                        var filtersDateListProf = db.Profits.Where(p => p.Mileage_num == mileage && p.User_id == user.User_id);
                         listOfExpenses.ItemsSource = new ObservableCollection<Profit>(filtersDateListProf);
                     }
                     else
                     {
-                        var itemCost = dataClass.selectQuery("select * from Expenses where Mileage_num = " + mileage).Rows;
+                        var itemCost = dataClass.selectQuery("select * from Expenses where Mileage_num = " + mileage + " AND Car_id = " + userCar.Car_id).Rows;
                         var filtersDateList = dataClass.SelecExpenses(itemCost);
                         listOfExpenses.ItemsSource = new ObservableCollection<Expense>(filtersDateList);// push items into listblock with expenses
                     }

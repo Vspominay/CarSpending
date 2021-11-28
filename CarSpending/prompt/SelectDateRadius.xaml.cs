@@ -27,8 +27,22 @@ namespace CarSpending.prompt
         private ListBox listOfExpenses, listOfRefills, listOfService, listOfProfit;
         private TextBlock totalExpesns_exp, dayExpesns_exp, totalMileage_exp, dayMilage_exp, TitleExpOrProf;
         private ApplicationContext db;
+        private Car userCar;
+        private User user;
 
-        public SelectDateRadius(Run dateRadius_exp,ListBox listOfExpenses,Run countNote_exp, TextBlock totalExpesns_exp, TextBlock dayExpesns_exp, TextBlock totalMileage_exp, TextBlock dayMilage_exp,ListBox listOfRefills, ListBox listOfService,ListBox listOfProfit, TextBlock TitleExpOrProf)
+        public SelectDateRadius(Run dateRadius_exp,
+            ListBox listOfExpenses,
+            Run countNote_exp,
+            TextBlock totalExpesns_exp,
+            TextBlock dayExpesns_exp,
+            TextBlock totalMileage_exp,
+            TextBlock dayMilage_exp,
+            ListBox listOfRefills,
+            ListBox listOfService,
+            ListBox listOfProfit,
+            TextBlock TitleExpOrProf,
+            Car userCar,
+            User user)
         {
             this.totalExpesns_exp = totalExpesns_exp;
             this.dayExpesns_exp = dayExpesns_exp;
@@ -41,6 +55,8 @@ namespace CarSpending.prompt
             this.listOfService = listOfService;
             this.listOfProfit = listOfProfit;
             this.TitleExpOrProf = TitleExpOrProf;
+            this.userCar = userCar;
+            this.user = user;
             InitializeComponent();
         }
 
@@ -54,7 +70,7 @@ namespace CarSpending.prompt
             DataClass dataClass = new DataClass();
 
             var test = dataClass.selectQuery("select * from Expenses where Expense_date BETWEEN  '" + expenseDateStart +
-                                             "' AND '" + expenseDateFinish + "'").Rows;
+                                             "' AND '" + expenseDateFinish + "'" + " AND Car_id = " + userCar.Car_id).Rows;
 
             var filtersDateList = dataClass.SelecExpenses(test);
 
@@ -96,8 +112,9 @@ namespace CarSpending.prompt
         {
             db = new ApplicationContext();
             List<Profit> result = new List<Profit>();
+            List<Profit> userProfit = db.Profits.Where(pr => pr.User_id == user.User_id).ToList();
 
-            foreach (var profit in db.Profits)
+            foreach (var profit in userProfit)
             {
                 DateTime timeProf = DateTime.Parse(profit.Profit_date);
                 if (timeProf >= DateTime.Parse(expenseDateStart) && timeProf <= DateTime.Parse(expenseDateFinish))

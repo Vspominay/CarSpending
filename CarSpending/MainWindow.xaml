@@ -1632,7 +1632,7 @@ x:Name="listOfExpenses"
                                                     <materialDesign:PackIcon Kind="SortVariant" Foreground="#FF303F9F"
                                                                              Width="30" Height="30" />
                                                 </StackPanel>
-                                                <StackPanel PreviewMouseLeftButtonDown="showGraphic" ToolTip="Сортировка" HorizontalAlignment="Right">
+                                                <StackPanel PreviewMouseLeftButtonDown="showGraphic" ToolTip="График расхода топлива" HorizontalAlignment="Right">
                                                     <materialDesign:PackIcon Kind="ChartAreaspline" Foreground="#FF303F9F"
                                                                              Width="30" Height="30" />
                                                 </StackPanel>
