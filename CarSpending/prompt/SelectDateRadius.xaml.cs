@@ -161,6 +161,13 @@ namespace CarSpending.prompt
             dayExpesns_exp.Text = calcutaeStatistick["averageCost"] + " ₴";
             totalMileage_exp.Text = calcutaeStatistick["resultMileage"] + " км";
             dayMilage_exp.Text = calcutaeStatistick["averageMileage"]+ " км";
+
+            dateRadius_exp.Text = "(" + expenseDateStart.Replace("-", "/") + " - " +
+                                  expenseDateFinish.Replace("-", "/") + ")"; // show date raius
+            totalExpesns_exp.Text = calcutaeStatistick["totalCost"] + " ₴";
+            dayExpesns_exp.Text = calcutaeStatistick["averageCost"] + " ₴";
+            totalMileage_exp.Text = calcutaeStatistick["resultMileage"] + " км";
+            dayMilage_exp.Text = calcutaeStatistick["averageMileage"] + " км";
             Close();
             
         }
@@ -169,16 +176,19 @@ namespace CarSpending.prompt
         {
             Dictionary<string, double> resultDictionary = new Dictionary<string, double>();
             double result = 0;
-            double resultMileage = 0;
             foreach (Expense itemExpense in filtersDateList)
             {
                 result += itemExpense.TotalCost;
-                resultMileage += itemExpense.Mileage_num;
             }
-            resultDictionary.Add("totalCost",result);
-            resultDictionary.Add("averageCost", result/ filtersDateList.Count);
-            resultDictionary.Add("resultMileage", resultMileage);
-            resultDictionary.Add("averageMileage", resultMileage / filtersDateList.Count);
+
+            double startMileage = filtersDateList[0].Mileage_num;
+            double finMileage = filtersDateList[filtersDateList.Count-1].Mileage_num;
+            double resultMileage = finMileage - startMileage;
+
+            resultDictionary.Add("totalCost",Math.Round(result,2) );
+            resultDictionary.Add("averageCost",Math.Round(result/ filtersDateList.Count,2));
+            resultDictionary.Add("resultMileage",Math.Round(resultMileage,2));
+            resultDictionary.Add("averageMileage",Math.Round(resultMileage / filtersDateList.Count));
 
 
             return resultDictionary;
@@ -188,16 +198,19 @@ namespace CarSpending.prompt
         {
             Dictionary<string, double> resultDictionary = new Dictionary<string, double>();
             double result = 0;
-            double resultMileage = 0;
             foreach (Profit itemProfit in filtersDateList)
             {
                 result += itemProfit.ProfitMargin_num;
-                resultMileage += itemProfit.Mileage_num;
             }
-            resultDictionary.Add("totalCost", result);
-            resultDictionary.Add("averageCost", result / filtersDateList.Count);
-            resultDictionary.Add("resultMileage", resultMileage);
-            resultDictionary.Add("averageMileage", resultMileage / filtersDateList.Count);
+
+            double startMileage = filtersDateList[0].Mileage_num;
+            double finMileage = filtersDateList[filtersDateList.Count - 1].Mileage_num;
+            double resultMileage = finMileage - startMileage;
+
+            resultDictionary.Add("totalCost", Math.Round(result, 2));
+            resultDictionary.Add("averageCost", Math.Round(result / filtersDateList.Count, 2));
+            resultDictionary.Add("resultMileage", Math.Round(resultMileage, 2));
+            resultDictionary.Add("averageMileage", Math.Round(resultMileage / filtersDateList.Count));
 
 
             return resultDictionary;
