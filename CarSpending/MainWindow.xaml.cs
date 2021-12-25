@@ -446,30 +446,35 @@ namespace CarSpending
         {
             dataClass = new DataClass();
             double tankVolume = userCars[ComboBoxCars.SelectedIndex].TankVolume_num;
-            var beforeRefillList = db.Refills.OrderByDescending(r => r.Refill_id).Take(1).ToList();
-            
-            double beforeRefillLiters = beforeRefillList[0].AmountLiter_num;
-            double tempLiters = tankVolume - amountLiter;
+            var beforeRefillList = db.Refills.OrderByDescending(r => r.Refill_id).Take(1).ToList()[0];
 
-            var tempBeforeMileage = dataClass.selectQuery("SELECT * from expenses where Refill_id = " + beforeRefillList[0].Refill_id).Rows;
-
-            var beforeMileage = dataClass.SelecExpenses(tempBeforeMileage);
-
-            double resultValue = Math.Round((beforeRefillLiters - tempLiters) / (carMileage - beforeMileage[0].Mileage_num) * 100);
-
-            if (db.Automations.ToList().Any(au => au.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id && au.AutData != ""))
+            if (beforeRefillList.FullTank_status == 1)
             {
-                var selectAut = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id);
-                selectAut.AutData += " " + resultValue;
+                double beforeRefillLiters = beforeRefillList.AmountLiter_num;
+                double tempLiters = tankVolume - amountLiter;
+
+                var tempBeforeMileage = dataClass.selectQuery("SELECT * from expenses where Refill_id = " + beforeRefillList.Refill_id).Rows;
+
+                var beforeMileage = dataClass.SelecExpenses(tempBeforeMileage);
+
+                double resultValue = Math.Round((amountLiter) / (carMileage - beforeMileage[0].Mileage_num) * 100);
+
+                if (db.Automations.ToList().Any(au => au.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id && au.AutData != ""))
+                {
+                    var selectAut = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id);
+                    selectAut.AutData += " " + resultValue;
+                }
+                else
+                {
+                    Automation newAut = new Automation(userCars[ComboBoxCars.SelectedIndex].Car_id, resultValue+"");
+                    db.Automations.Add(newAut);
+                }
             }
-            else
-            {
-                Automation newAut = new Automation(userCars[ComboBoxCars.SelectedIndex].Car_id, resultValue+"");
-                db.Automations.Add(newAut);
-            }
+           
             db.SaveChanges();
 
         }
+
 
         private void addNoteAboutRefill_click(object sender, RoutedEventArgs e) // add note about refill
         {
