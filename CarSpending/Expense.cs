@@ -9,6 +9,7 @@ namespace CarSpending
 {
     public class Expense
     {
+        public string ExpenseName { get; set; }
         [Key]
         public int Expenses_id { get; set; }
         public int Car_id { get; set; }

@@ -23,17 +23,19 @@ namespace CarSpending.prompt
     public partial class MonthStatistic : Window
     {
         private DataClass dataClass;
+        private Car userCar;
         
-        public MonthStatistic()
+        public MonthStatistic(Car userCar)
         {
+            this.userCar = userCar;
             dataClass = new DataClass();
             InitializeComponent();
-            MakeStaticstic();
+            MakeStaticstic(userCar);
         }
 
-        public void MakeStaticstic()
+        public void MakeStaticstic(Car userCar)
         {
-            var rowCollectionStatistiks = dataClass.selectQuery("select  strftime(\"%m-%Y\", Expense_date) as 'month-year', SUM(TotalCost) as Price from Expenses group by strftime(\"%m-%Y\", Expense_date)").Rows;
+            var rowCollectionStatistiks = dataClass.selectQuery("select  strftime(\"%m-%Y\", Expense_date) as 'month-year', SUM(TotalCost) as Price from Expenses WHERE Car_id = " + userCar.Car_id + " group by strftime(\"%m-%Y\", Expense_date)").Rows;
 
             List<MonthCost> filtersDateList = new List<MonthCost>();
 

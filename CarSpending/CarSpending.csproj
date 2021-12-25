@@ -223,9 +223,11 @@
     <Compile Include="favorType.cs" />
     <Compile Include="FuelType.cs" />
     <Compile Include="Image.cs" />
+    <Compile Include="ListboxItems\FavorsStat.cs" />
     <Compile Include="ListboxItems\MonthCost.cs" />
     <Compile Include="ListboxItems\TypeOfserviceItems.cs" />
     <Compile Include="MyConverter.cs" />
+    <Compile Include="MyData.cs" />
     <Compile Include="Profit.cs" />
     <Compile Include="ProfitType.cs" />
     <Compile Include="prompt\AddProfitType.xaml.cs">
@@ -233,6 +235,9 @@
     </Compile>
     <Compile Include="prompt\AddServiceType.xaml.cs">
       <DependentUpon>AddServiceType.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="prompt\ChangeICarInfo.xaml.cs">
+      <DependentUpon>ChangeICarInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="prompt\DeleteExpense.xaml.cs">
       <DependentUpon>DeleteExpense.xaml</DependentUpon>
@@ -249,6 +254,9 @@
     <Compile Include="prompt\promptNotFoundUser.xaml.cs">
       <DependentUpon>promptNotFoundUser.xaml</DependentUpon>
     </Compile>
+    <Compile Include="prompt\ReportAllServices.xaml.cs">
+      <DependentUpon>ReportAllServices.xaml</DependentUpon>
+    </Compile>
     <Compile Include="prompt\SearchData.xaml.cs">
       <DependentUpon>SearchData.xaml</DependentUpon>
     </Compile>
@@ -257,6 +265,12 @@
     </Compile>
     <Compile Include="prompt\SortWindow.xaml.cs">
       <DependentUpon>SortWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="testtttt.xaml.cs">
+      <DependentUpon>testtttt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserQuestions\UserQuestions.xaml.cs">
+      <DependentUpon>UserQuestions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Refill.cs" />
     <Compile Include="Reminder.cs" />
@@ -294,6 +308,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="prompt\ChangeICarInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="prompt\DeleteExpense.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -318,6 +336,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="prompt\ReportAllServices.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="prompt\SearchData.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -327,6 +349,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="prompt\SortWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="testtttt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserQuestions\UserQuestions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

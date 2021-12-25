@@ -1,0 +1,94 @@
+﻿<Window x:Class="CarSpending.prompt.ChangeICarInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:CarSpending"
+        mc:Ignorable="d"
+        Title="ChangeCar" Height="459.6" Width="660.8" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style x:Key="margBottom">
+            <Setter Property="Control.Margin" Value="0,0,0,15" />
+
+        </Style>
+    </Window.Resources>
+    <Grid Background="#FF303F9F" Margin="0,0,0.4,-0.4">
+        <Border 
+            x:Name="RegBlock"
+            Padding="20" Background="White" VerticalAlignment="Center" CornerRadius="25" Margin="25,25"  >
+            <StackPanel>
+                <Grid Margin="20,20">
+                    <TextBlock Text="Изменение информации про авто" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" FontWeight="Bold" Foreground="#FF303F9F"></TextBlock>
+
+                </Grid>
+
+                <Grid  VerticalAlignment="Center" Style="{StaticResource margBottom}">
+                    <materialDesign:PackIcon Kind="Car"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+
+                    <TextBox
+                        x:Name ="CarBrand_change"
+                        materialDesign:HintAssist.Hint="Введите марку вашего авто"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        VerticalAlignment="Center" 
+                        ToolTip="Не используйте специальные символы )(?:%№ " Margin="21,0,0,-0.2"
+                        />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center" Style="{StaticResource margBottom}">
+                    <materialDesign:PackIcon Kind="Car"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <TextBox
+                        x:Name="CarVIN_change"
+                     materialDesign:HintAssist.Hint="Введите VIN номер"
+                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                     VerticalAlignment="Center" 
+                        MaxLength="17"
+                     ToolTip="Длинна строки должна содержать 17 символов" Margin="21,0,0,-0.2"
+                       />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center" Style="{StaticResource margBottom}">
+                    <materialDesign:PackIcon Kind="Counter"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <TextBox
+                        x:Name="CarMileage_change"
+                    materialDesign:HintAssist.Hint="Введите пробег (km)"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                    VerticalAlignment="Center" Margin="21,0,0,-0.2" 
+                  />
+                </Grid>
+
+                <Grid  VerticalAlignment="Center" Style="{StaticResource margBottom}">
+                    <materialDesign:PackIcon Kind="Fuel"  VerticalAlignment="Bottom" HorizontalAlignment="Left" Foreground="#FF303F9F" />
+                    <TextBox
+                        x:Name="CarTankVolume_change"
+
+                    materialDesign:HintAssist.Hint="Введите объём бензобака (л)"
+                        Margin="21,0,0,-0.2"
+                    ToolTip="Придумайте пароль"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                </Grid>
+
+                <Grid  VerticalAlignment="Center"/>
+
+                <Grid Margin="60,20,60,0">
+                    <Button
+                        Click="addCarClose_click"
+                        Style="{StaticResource MaterialDesignOutlinedDarkButton}"
+                        ToolTip="Вернуться в меню"
+                        Content="Отмена"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" HorizontalAlignment="Left" />
+                    <Button 
+                        Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                        Content="Изменить данные"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" HorizontalAlignment="Right" Click="AddAuto_click"   />
+
+                </Grid>
+            </StackPanel>
+
+        </Border>
+        <RadioButton Visibility="Hidden" x:Name="СheckAuth"  HorizontalAlignment="Left" Margin="30,10,0,0" VerticalAlignment="Top" IsChecked="True" Height="49"/>
+        <RadioButton Visibility="Hidden" x:Name="СheckReg"  HorizontalAlignment="Left" Margin="30,10,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

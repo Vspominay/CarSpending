@@ -36,6 +36,7 @@ namespace CarSpending
     {
 
         private ApplicationContext db;
+        private FavorsStat fs;
         public ObservableCollection<FuelType> FuelTypes { get; set; }
 
         public ObservableCollection<TypeOfserviceItem> TypeOfserviceItems { get; set; }
@@ -66,10 +67,7 @@ namespace CarSpending
 
         public string TypeIcon
         {
-            get
-            {
-                return typeIcon;
-            }
+            get => typeIcon;
             set
             {
                 if (typeIcon != value)
@@ -92,7 +90,7 @@ namespace CarSpending
             hiTitle.Text = "Здравствуйте, " + user.First_name + "!";
             this.user = user;
             db = new ApplicationContext();
-
+            
             TypeOfserviceItems = new ObservableCollection<TypeOfserviceItem>();
             foreach (var typeItem in db.FavorTypes)
             {
@@ -102,30 +100,9 @@ namespace CarSpending
 
             serviceType_list.ItemsSource = TypeOfserviceItems;
 
-            pushIntoListbox(FuelTypes, typesOfFuel, db.FuelTypes); //push type services into listbox
-            pushIntoListbox(ProfitTypes, typeOfProfit, db.ProfitTypes); //push profit types into listbox
-            pushIntoListbox(RemindersList, reminders_list, db.Reminders); //push reminders into listbox
-
-
-            // ExpensesList = new ObservableCollection<Expense>();
-            /*
-           foreach (var expenseItem in result)
-           {
-               if (expenseItem.Service_id == null)
-               {
-                   ExpensesList.Add(new Expense(expenseItem.Car_id,expenseItem.Expense_date,expenseItem.Mileage_num,expenseItem.TotalCost,
-                       -1,expenseItem.Refill_id,expenseItem.Comment,expenseItem.Location));
-               }
-               else
-               {
-                   ExpensesList.Add(new Expense(expenseItem.Car_id, expenseItem.Expense_date, expenseItem.Mileage_num, expenseItem.TotalCost,
-                       expenseItem.Service_id, -1, expenseItem.Comment, expenseItem.Location));
-               }
-           }
-           listOfExpenses.ItemsSource = ExpensesList;*/
-
-            //LoadDataIntoExpensesList();
-
+            PushIntoListbox(FuelTypes, typesOfFuel, db.FuelTypes); //push type services into listbox
+            PushIntoListbox(ProfitTypes, typeOfProfit, db.ProfitTypes); //push profit types into listbox
+            PushIntoListbox(RemindersList, reminders_list, db.Reminders); //push reminders into listbox
         }
 
         public void LoadDataIntoProfitsList(ListBox listOfProfits)
@@ -152,6 +129,8 @@ namespace CarSpending
         }
         public void LoadDataIntoExpensesList(ListBox listOfExpenses)
         {
+
+            fs = new FavorsStat();
             DataTable dTable = new DataTable();
             List<Expense> testList = new List<Expense>();
 
@@ -167,7 +146,7 @@ namespace CarSpending
                 {
                     TypeIcon = "Wrench";
                     int carId, serviceId, refillId, Expenses_id;
-                    string expanseDate, comment, location;
+                    string expanseDate, comment, location, expenseName;
                     double mileage, totalCost;
                     for (int i = 0; i < dTable.Rows.Count; i++)
                     {
@@ -197,6 +176,8 @@ namespace CarSpending
                         comment = dTable.Rows[i].ItemArray[5].ToString();
                         location = dTable.Rows[i].ItemArray[8].ToString();
 
+                        expenseName = serviceId != -1 ? fs.GetFavorStatistick(serviceId) : "Заправка";
+
                         var exp = new Expense
                         {
                             Car_id = carId,
@@ -207,9 +188,9 @@ namespace CarSpending
                             Refill_id = refillId,
                             Comment = comment,
                             Location = location,
-                            Expenses_id = Expenses_id
+                            Expenses_id = Expenses_id,
+                            ExpenseName = expenseName
                         };
-
                         testList.Add(exp);
                     }
                 }
@@ -223,34 +204,6 @@ namespace CarSpending
 
 
             FilterExpense(ref listOfExpenses, new ObservableCollection<Expense>(), new List<Expense>(), testList,listOfRefills,listOfService);
-            /*if (listOfExpenses == listOfRefills)
-            {
-                foreach (var testItem in testList)
-                {
-                    if (testItem.Service_id == -1)
-                    {
-                        refiltList.Add(testItem);
-                    }
-                }
-
-                listOfRefills.ItemsSource = new ObservableCollection<Expense>(refiltList);
-            }
-            else if (listOfExpenses == listOfService)
-            {
-                foreach (var testItem in testList)
-                {
-                    if (testItem.Refill_id == -1)
-                    {
-                        servicetList.Add(testItem);
-                    }
-                }
-                listOfService.ItemsSource = new ObservableCollection<Expense>(servicetList);
-            }
-            else
-            {
-                listOfExpenses.ItemsSource = new ObservableCollection<Expense>(testList);
-
-            }*/
 
         }
 
@@ -281,11 +234,13 @@ namespace CarSpending
             }
             else
             {
+
                 listbox.ItemsSource = new ObservableCollection<Expense>(testList);
             }
         }
 
-        public void pushIntoListbox<T>(ObservableCollection<T> observableCollection, ListBox listBox,DbSet dbSet)
+
+        public void PushIntoListbox<T>(ObservableCollection<T> observableCollection, ListBox listBox,DbSet dbSet)
         {
             observableCollection = new ObservableCollection<T>();
             foreach (T setObject in dbSet)
@@ -491,30 +446,35 @@ namespace CarSpending
         {
             dataClass = new DataClass();
             double tankVolume = userCars[ComboBoxCars.SelectedIndex].TankVolume_num;
-            var beforeRefillList = db.Refills.OrderByDescending(r => r.Refill_id).Take(1).ToList();
-            
-            double beforeRefillLiters = beforeRefillList[0].AmountLiter_num;
-            double tempLiters = tankVolume - amountLiter;
+            var beforeRefillList = db.Refills.OrderByDescending(r => r.Refill_id).Take(1).ToList()[0];
 
-            var tempBeforeMileage = dataClass.selectQuery("SELECT * from expenses where Refill_id = " + beforeRefillList[0].Refill_id).Rows;
-
-            var beforeMileage = dataClass.SelecExpenses(tempBeforeMileage);
-
-            double resultValue = (beforeRefillLiters - tempLiters) / (carMileage - beforeMileage[0].Mileage_num) * 100;
-
-            if (db.Automations.ToList().Any(au => au.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id && au.AutData != ""))
+            if (beforeRefillList.FullTank_status == 1)
             {
-                var selectAut = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id);
-                selectAut.AutData += " " + resultValue;
+                double beforeRefillLiters = beforeRefillList.AmountLiter_num;
+                double tempLiters = tankVolume - amountLiter;
+
+                var tempBeforeMileage = dataClass.selectQuery("SELECT * from expenses where Refill_id = " + beforeRefillList.Refill_id).Rows;
+
+                var beforeMileage = dataClass.SelecExpenses(tempBeforeMileage);
+
+                double resultValue = Math.Round((amountLiter) / (carMileage - beforeMileage[0].Mileage_num) * 100);
+
+                if (db.Automations.ToList().Any(au => au.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id && au.AutData != ""))
+                {
+                    var selectAut = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id);
+                    selectAut.AutData += " " + resultValue;
+                }
+                else
+                {
+                    Automation newAut = new Automation(userCars[ComboBoxCars.SelectedIndex].Car_id, resultValue+"");
+                    db.Automations.Add(newAut);
+                }
             }
-            else
-            {
-                Automation newAut = new Automation(userCars[ComboBoxCars.SelectedIndex].Car_id, resultValue+"");
-                db.Automations.Add(newAut);
-            }
+           
             db.SaveChanges();
 
         }
+
 
         private void addNoteAboutRefill_click(object sender, RoutedEventArgs e) // add note about refill
         {
@@ -693,38 +653,9 @@ namespace CarSpending
 
             DateTime dt;
             ValidationDate(expenseDate_service, ref expenseDate, ref isCorect);
-            // if (DateTime.TryParse(expenseDate_service.Text, out dt))
-            // {
-            //     ExpenseDate = ToDateSqlite(DateTime.Parse(expenseDate_service.Text));
-            // }
-            // else
-            // {
-            //     isCorect = false;
-            //     expenseDate_service.Foreground = Brushes.DarkRed;
-            //     TextFieldAssist.SetUnderlineBrush(expenseDate_service, Brushes.DarkRed);
-            //     HintAssist.SetHint(expenseDate_service, "Некоректно заполненое поле");
-            // }
-
+           
             ValidationMileage(mileage_service, ref carMileage, ref isCorect);
-            /*if (mileage_service.Text.Length <= 0 ||
-                !Regex.IsMatch(mileage_service.Text, @"^[0-9,.]*$", RegexOptions.IgnoreCase)) // check car mileage
-            {
-                mileage_service.Foreground = Brushes.DarkRed;
-                TextFieldAssist.SetUnderlineBrush(mileage_service, Brushes.DarkRed);
-                HintAssist.SetHint(mileage_service, "Некоректно заполненое поле ");
-                isCorect = false;
-            }
-            else
-            {
-                if (mileage_service.Text.Trim().Contains('.'))
-                {
-                    CarMileage = Convert.ToDouble(mileage_service.Text.Trim().Replace('.', ','));
-                }
-                else
-                {
-                    CarMileage = Convert.ToDouble(mileage_service.Text.Trim());
-                }
-            }*/
+            
 
             if (literCost_service.Text.Length == 0)
             {
@@ -831,49 +762,10 @@ namespace CarSpending
             string patternText = @"[-!#\$%&'\*\+/=\?\@]";
 
             ValidationMileage(mileage_profit,ref carMileage,ref isCorect);
-            /*if (mileage_profit.Text.Length <= 0 ||
-                !Regex.IsMatch(mileage_profit.Text, @"^[0-9,.]*$", RegexOptions.IgnoreCase)) // check car mileage
-            {
-                mileage_profit.Foreground = Brushes.DarkRed;
-                TextFieldAssist.SetUnderlineBrush(mileage_profit, Brushes.DarkRed);
-                HintAssist.SetHint(mileage_profit, "Некоректно заполненое поле ");
-                isCorect = false;
-            }
-            else
-            {
-                if (mileage_profit.Text.Trim().Contains('.'))
-                {
-                    CarMileage = Convert.ToDouble(mileage_profit.Text.Trim().Replace('.', ','));
-                }
-                else
-                {
-                    CarMileage = Convert.ToDouble(mileage_profit.Text.Trim());
-                }
-            }*/
+           
 
             validationCost(literCost_profit,ref profitMargin,ref isCorect,patternText);
-            /*if (literCost_profit.Text.Length <= 0 || Regex.IsMatch(literCost_profit.Text, patternText,
-                                                      RegexOptions.IgnoreCase)
-                                                  || Regex.IsMatch(literCost_profit.Text, @"[a-zA-Z]",
-                                                      RegexOptions.IgnoreCase)) // check liter cost
-            {
-                literCost_profit.Foreground = Brushes.DarkRed;
-                TextFieldAssist.SetUnderlineBrush(literCost_profit, Brushes.DarkRed);
-                HintAssist.SetHint(literCost_profit, "Некоректно заполненое поле");
-                isCorect = false;
-            }
-            else
-            {
-                if (literCost_profit.Text.Trim().Contains('.'))
-                {
-                    profitMargin = Convert.ToDouble(literCost_profit.Text.Trim().Replace('.', ','));
-                }
-                else
-                {
-                    profitMargin = Convert.ToDouble(literCost_profit.Text.Trim());
-                }
-            }*/
-
+           
             
             if (inputTypeOfProfit.Text.Length < 1) //checking correct data entry in the type of profit field
             {
@@ -887,19 +779,8 @@ namespace CarSpending
                 profitId = db.ProfitTypes.ToList().FirstOrDefault(prof => prof.ProfitType_title == profitSelet.ProfitType_title).ProfitType_id;
             }
 
-            ValidationDate(expenseDate_profit,ref expenseDate,ref isCorect);
-            // if (DateTime.TryParse(expenseDate_profit.Text, out dt))
-            // {
-            //     ExpenseDate = ToDateSqlite(DateTime.Parse(expenseDate_profit.Text));
-            // }
-            // else
-            // {
-            //     isCorect = false;
-            //     expenseDate_profit.Foreground = Brushes.DarkRed;
-            //     TextFieldAssist.SetUnderlineBrush(expenseDate_profit, Brushes.DarkRed);
-            //     HintAssist.SetHint(expenseDate_profit, "Некоректно заполненое поле");
-            // }
-
+            ValidationDate(expenseDate_profit, ref expenseDate, ref isCorect);
+           
             if (isCorect)
             {
 
@@ -1000,14 +881,12 @@ namespace CarSpending
             var topFavorsCost = db.Favors.OrderByDescending(f => f.FavorCost_num).Take(5).ToList();
             List<favorType> favorTypes = new List<favorType>();
 
-            
             for (int i = 0; i < topFavorsCost.Count; i++)
             {
                 favorTypes.Add(db.FavorTypes.ToList().FirstOrDefault(ft=> ft.FavorType_id == topFavorsCost[i].FavorType_id));
             }
             
-
-            TypeOfserviceItems = new ObservableCollection<TypeOfserviceItem>();
+            var TypeOfserviceItems = new ObservableCollection<TypeOfserviceItem>();
             for (int i = 0; i < topFavorsCost.Count; i++)
             {
                 TypeOfserviceItems.Add(new TypeOfserviceItem
@@ -1017,6 +896,7 @@ namespace CarSpending
                 });
             }
             topCostList.ItemsSource = TypeOfserviceItems;
+            topCostList_print.ItemsSource = TypeOfserviceItems;
 
         }
         private void TabItem_PreviewMouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
@@ -1045,6 +925,13 @@ namespace CarSpending
 
             selectDate.Owner = this;
             selectDate.ShowDialog();
+            dateRadius_exp_print.Text = dateRadius_exp.Text;
+            totalExpesns_exp_print.Text = totalExpesns_exp.Text;
+            dayExpesns_exp_print.Text = dayExpesns_exp.Text;
+            totalMileage_exp_print.Text = totalMileage_exp.Text;
+            dayMilage_exp_print.Text = dayMilage_exp.Text;
+
+
             cardAboutAllReport.Visibility = Visibility.Visible;
             cardInfoAboutItemExpense.Visibility = Visibility.Hidden;
         }
@@ -1333,7 +1220,7 @@ namespace CarSpending
 
         private void UIElement_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MonthStatistic monthStatistic = new MonthStatistic();
+            MonthStatistic monthStatistic = new MonthStatistic(userCars[ComboBoxCars.SelectedIndex]);
             monthStatistic.Owner = this;
             monthStatistic.ShowDialog();
         }
@@ -1346,7 +1233,7 @@ namespace CarSpending
                 PrintDialog printDialog = new PrintDialog();
                 if (printDialog.ShowDialog() == true)
                 {
-                    printDialog.PrintVisual(print, "Общий отчёт за период");
+                    printDialog.PrintVisual(cardAboutAllReport_print, "Общий отчёт за период");
                 }
             }
             finally
@@ -1357,13 +1244,33 @@ namespace CarSpending
 
         private void makeReportExpens(object sender, MouseButtonEventArgs e)
         {
+            if (gasGrid.Visibility == Visibility.Visible)
+            {
+                gasGrid_print.Visibility = Visibility.Visible;
+                ServiceGrid_print.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                gasGrid_print.Visibility = Visibility.Hidden;
+                ServiceGrid_print.Visibility = Visibility.Visible;
+            }
+
+            totalCost_expense_print.Text = totalCost_expense.Text;
+            Mileage_expense_print.Text = Mileage_expense.Text;
+            Date_expense_print.Text = Date_expense.Text;
+            location_expense_print.Text = location_expense.Text;
+            countLiters_expense_print.Text = countLiters_expense.Text;
+            oneLitr_expense_print.Text = oneLitr_expense.Text;
+            listOfFavors_print.ItemsSource = listOfFavors.ItemsSource;
+            comment_expense_print.Text = comment_expense.Text;
+
             try
             {
                 this.IsEnabled = false;
                 PrintDialog printDialog = new PrintDialog();
                 if (printDialog.ShowDialog() == true)
                 {
-                    printDialog.PrintVisual(reportExpense, "Общий отчёт за период");
+                    printDialog.PrintVisual(reportExpense_print, "Общий отчёт за период");
                 }
             }
             finally
@@ -1372,11 +1279,25 @@ namespace CarSpending
             }
         }
 
-        private void showGraphic(object sender, MouseButtonEventArgs e)
+        private void ShowGraphic(object sender, MouseButtonEventArgs e)
         {
             SolidColorExample drawGraph = new SolidColorExample(userCars[ComboBoxCars.SelectedIndex]);
             drawGraph.Owner = this;
             drawGraph.ShowDialog();
+        }
+
+        private void openQuestWind_click(object sender, MouseButtonEventArgs e)
+        {
+            UserQuestions userq = new UserQuestions();
+            userq.Owner = this;
+            userq.ShowDialog();
+        }
+
+        private void changeData_click(object sender, RoutedEventArgs e)
+        {
+            ChangeICarInfo changeCar = new ChangeICarInfo(userCars[ComboBoxCars.SelectedIndex],user);
+            changeCar.Owner = this;
+            changeCar.ShowDialog();
         }
     }
 }

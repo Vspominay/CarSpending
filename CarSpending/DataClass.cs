@@ -6,19 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using CarSpending.ListboxItems;
 
 namespace CarSpending
 {
     public class DataClass
     {
         private SQLiteConnection sqlite;
+        private FavorsStat fs;
 
         public DataClass()
         {
             //This part killed me in the beginning.  I was specifying "DataSource"
             //instead of "Data Source"
             sqlite = new SQLiteConnection("Data Source=.\\spendingCar.db");
-
+            fs = new FavorsStat();
         }
 
         public DataTable selectQuery(string query)
@@ -50,7 +52,7 @@ namespace CarSpending
             if (dTable.Count > 0)
             {
                 int carId, serviceId, refillId, Expenses_id;
-                string expanseDate, comment, location;
+                string expanseDate, comment, location, expenseName;
                 double mileage, totalCost;
                 for (int i = 0; i < dTable.Count; i++)
                 {
@@ -79,6 +81,7 @@ namespace CarSpending
 
                     comment = dTable[i].ItemArray[5].ToString();
                     location = dTable[i].ItemArray[8].ToString();
+                    expenseName = serviceId != -1 ? fs.GetFavorStatistick(serviceId) : "Заправка";
 
                     var exp = new Expense
                     {
@@ -90,7 +93,8 @@ namespace CarSpending
                         Refill_id = refillId,
                         Comment = comment,
                         Location = location,
-                        Expenses_id = Expenses_id
+                        Expenses_id = Expenses_id,
+                        ExpenseName = expenseName
                     };
 
                     testList.Add(exp);
