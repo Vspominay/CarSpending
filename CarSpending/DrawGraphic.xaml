@@ -7,6 +7,8 @@
                  xmlns:local="clr-namespace:Wpf.CartesianChart.SolidColorChart"
                  xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
                  mc:Ignorable="d" 
+                Icon="img/windLog.png"
+
                  d:DesignHeight="300" d:DesignWidth="600"
                  Background="#FF303F9F"
     Title="Graphic" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">

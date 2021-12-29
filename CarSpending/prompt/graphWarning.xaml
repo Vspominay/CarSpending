@@ -1,0 +1,42 @@
+﻿<Window x:Class="CarSpending.prompt.graphWarning"
+   xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CarSpending.prompt"
+        mc:Ignorable="d"
+        Title="Warning" Height="167.249" Width="500.588" Foreground="#FF303F9F" Background="White" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        >
+    <Border BorderBrush="#FF303F9F" BorderThickness="3" >
+
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <materialDesign:PackIcon Kind="WarningCircle" Height="32" Width="464" Margin="0 0 0 15px" RenderTransformOrigin="4.033,0.5" />
+                <TextBlock
+                           TextAlignment="Center"
+                           Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="Для отображения графика добавьте ещё"
+                />
+                <TextBlock Margin="0 0 0 15px"
+                           TextAlignment="Center"
+                           Style="{StaticResource MaterialDesignHeadline6TextBlock}" Text="несколько записей об заправках"></TextBlock>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" >
+
+
+                    <Button
+                        Click="CancelDeleteExpense_click"
+                Style="{StaticResource MaterialDesignOutlinedDarkButton}"
+                ToolTip="Нажмите для отмены"
+                Content="Ок"
+                Width="162"
+                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" />
+                    <Separator Width="30" Background="Transparent"/>
+
+                </StackPanel>
+            </StackPanel>
+
+
+        </Grid>
+    </Border>
+</Window>

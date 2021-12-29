@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:CarSpending.prompt"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="CarSpending.prompt.UserQuestions"
         mc:Ignorable="d"
+        Icon="../img/windLog.png"
+
         Title="UserQuestions" Height="650" Width="900">
     <Grid >
         <StackPanel>

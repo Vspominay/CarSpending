@@ -11,27 +11,22 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using CarSpending.ListboxItems;
 
-namespace CarSpending
+namespace CarSpending.prompt
 {
     /// <summary>
-    /// Логика взаимодействия для testtttt.xaml
+    /// Логика взаимодействия для graphWarning.xaml
     /// </summary>
-    public partial class testtttt : Window
+    public partial class graphWarning : Window
     {
-        private FavorsStat fs;
-
-        public testtttt()
+        public graphWarning()
         {
             InitializeComponent();
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void CancelDeleteExpense_click(object sender, RoutedEventArgs e)
         {
-            fs = new FavorsStat();
-            inputField.Text = fs.GetFavorStatistick(114);
-
+            Close();
         }
     }
 }

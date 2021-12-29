@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:CarSpending.prompt"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
+        Icon="../img/windLog.png"
+
         Title="ReportAllServices" Height="600" Width="800">
     <Grid Height="600" Width="800">
         <materialDesign:Card

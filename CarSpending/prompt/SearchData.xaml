@@ -6,6 +6,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:CarSpending"
         mc:Ignorable="d"
+        Icon="../img/windLog.png"
+
         Title="Search" Height="280" Width="700" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid Background="#303f5f">
 

@@ -48,9 +48,13 @@ namespace CarSpending.ListboxItems
 
             var outputStr = "";
             var splittedStr = result.Split('&');
-            if (splittedStr.Length > 1)
+            if (splittedStr.Length > 2)
             {
                 outputStr += $"{splittedStr[0]} (+{splittedStr.Length - 2})";
+            }
+            else
+            {
+                outputStr += splittedStr[0];
             }
 
             return outputStr;

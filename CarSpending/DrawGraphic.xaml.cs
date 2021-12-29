@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using CarSpending;
 using LiveCharts;
 using System;
+using CarSpending.prompt;
 
 namespace Wpf.CartesianChart.SolidColorChart
 {
@@ -15,27 +16,36 @@ namespace Wpf.CartesianChart.SolidColorChart
     {
         private ApplicationContext db;
         private Car car;
-        public SolidColorExample(Car car)
+
+        public SolidColorExample(Car car,ref bool warning)
         {
+
             this.car = car;
             db = new ApplicationContext();
             InitializeComponent();
 
             if (db.Automations != null)
             {
-                var dataGraph = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == car.Car_id).AutData.Split(' ');
+                var dataGraph = db.Automations.ToList().FirstOrDefault(aut => aut.Car_id == car.Car_id)?.AutData.Split(' ');
                 List<double> test = new List<double>();
+                if (dataGraph == null)
+                {
+                    warning = true;
+                    graphWarning wr = new graphWarning();
+                    wr.ShowDialog();
+                    return;
+                }
 
                 foreach (var itemArr in dataGraph)
                 {
                     test.Add(Convert.ToDouble(itemArr));
                 }
 
-            
                 Values = new ChartValues<double>(test);
+                DataContext = this;
             }
 
-            DataContext = this;
+
         }
 
         public ChartValues<double> Values { get; set; }

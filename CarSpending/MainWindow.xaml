@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CarSpending"
         mc:Ignorable="d"
+        Icon="img/windLog.png"
+
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         Title="MainWindow" Height="750" Width="1330.8"
         Background="#FF303F9F" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         Loaded="MainWindow_OnLoaded"
@@ -21,7 +24,9 @@
             <Setter Property="Control.Height" Value="60"></Setter>
             <Setter Property="Control.VerticalAlignment" Value="Center"></Setter>
         </Style>
+        <system:Double  x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">3</system:Double>
     </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -3030,7 +3035,8 @@ Click="AddNewRemider_click"
                 >
                             <Grid>
                                 <materialDesign:Card>
-                                    <ScrollViewer>
+                                    <ScrollViewer 
+                                        >
 
                                         <StackPanel>
 
@@ -3204,6 +3210,23 @@ Click="AddNewRemider_click"
                                                         <materialDesign:PackIcon PreviewMouseLeftButtonDown="openQuestWind_click" Kind="PencilBox" Height="45" Width="45" Foreground="#FF303F9F" VerticalAlignment="Center" Margin="0,14,0,19.8" Grid.Row="1" HorizontalAlignment="Right" />
 
                                                     </Grid>
+                                                </StackPanel>
+                                            </Expander>
+                                            <Expander
+                                                Margin="0,0,0,25"
+                                                HorizontalAlignment="Stretch"
+                                                Header="Как просмотреть график расхода топлива?">
+                                                <StackPanel
+                                                    Orientation="Vertical"
+                                                    TextBlock.Foreground="{DynamicResource MaterialDesignBody}"
+                                                    Margin="24,8,24,16">
+                                                    <TextBlock>
+                                                        <Run Text="1. Нажмите на пункт статистика в левом меню"/><LineBreak/>
+                                                        <Run Text="2. Нажмите на пункт заправки, для отображения данных только о заправках"/><LineBreak/>
+                                                        <Run Text="3. В меню, около фильтрации и поиска, нажмите на иконку графика"/><LineBreak/>
+                                                        <Run Text="4. Для коректного рассчёта расхода топлива нужно иметь несколько заправок с полным баком"/><LineBreak/>
+
+                                                    </TextBlock>
                                                 </StackPanel>
                                             </Expander>
 

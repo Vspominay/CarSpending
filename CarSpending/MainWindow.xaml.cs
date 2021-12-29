@@ -457,7 +457,7 @@ namespace CarSpending
 
                 var beforeMileage = dataClass.SelecExpenses(tempBeforeMileage);
 
-                double resultValue = Math.Round((amountLiter) / (carMileage - beforeMileage[0].Mileage_num) * 100);
+                double resultValue = Math.Round(amountLiter / (carMileage - beforeMileage[0].Mileage_num) * 100, digits: 2);
 
                 if (db.Automations.ToList().Any(au => au.Car_id == userCars[ComboBoxCars.SelectedIndex].Car_id && au.AutData != ""))
                 {
@@ -1263,6 +1263,7 @@ namespace CarSpending
             oneLitr_expense_print.Text = oneLitr_expense.Text;
             listOfFavors_print.ItemsSource = listOfFavors.ItemsSource;
             comment_expense_print.Text = comment_expense.Text;
+            isFulTank_expense_print.Text = isFulTank_expense.Text;
 
             try
             {
@@ -1281,9 +1282,14 @@ namespace CarSpending
 
         private void ShowGraphic(object sender, MouseButtonEventArgs e)
         {
-            SolidColorExample drawGraph = new SolidColorExample(userCars[ComboBoxCars.SelectedIndex]);
-            drawGraph.Owner = this;
-            drawGraph.ShowDialog();
+            var warning = false;
+            SolidColorExample drawGraph = new SolidColorExample(userCars[ComboBoxCars.SelectedIndex],ref warning);
+            if (!warning)
+            {
+                drawGraph.Owner = this;
+                drawGraph.ShowDialog();
+            }
+
         }
 
         private void openQuestWind_click(object sender, MouseButtonEventArgs e)
